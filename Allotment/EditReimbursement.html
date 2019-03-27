@@ -1,0 +1,79 @@
+﻿<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <label for="selProgram">Program: </label>
+        <select style="width:60%;" id="selProgram" ng-model="Reimbursement.Program">
+            <option ng-repeat="p in Programs">{{p}}</option>
+        </select>
+    </div>
+</div>
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1-3">
+        <label for="inpDate">Date: </label>
+        <input type="date" id="inpDate" ng-model="Reimbursement.Date" />
+    </div>
+    <div class="pure-u-1-3">
+        <label for="inpAgreement">Agreement: </label>
+        <input type="text" id="inpAgreement" ng-model="Reimbursement.Agreement" />
+    </div>
+    <div class="pure-u-1-3">
+        <label for="selStatus">Status: </label>
+        <select id="selStatus" ng-model="Reimbursement.Status">
+            <option ng-repeat="s in Statuses">{{s}}</option>
+        </select>
+    </div>
+</div>
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <label for="selAgency">Agency: </label>
+        <select style="width:60%;" id="selAgency" ng-model="Reimbursement.Agency">
+            <option ng-repeat="a in Agencies">{{a}}</option>
+        </select>
+    </div>
+</div>
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <label for="inpPurpose">Purpose: </label>
+        <input style="width:60%;" type="text" id="inpPurpose" ng-model="Reimbursement.Purpose" />
+    </div>
+</div>
+<div class="pure-g padding-row pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <h4>Reimbursement Funds</h4>
+        <table class="pure-table pure-table-bordered" id="tblAvailableFunds">
+            <thead>
+                <tr>
+                    <th>Program</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<tr ng-show="AvailableFunds.length == 0">
+            		<td colspan="2">
+            			No Reimbursement Funds Available
+            		</td>
+            	</tr>
+                <tr ng-repeat="f in AvailableFunds track by $index">
+                    <td>{{f.Program}}</td>
+                    <td>{{f.Amount | currency | negativeParenthesis }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="pure-g padding-row pure-form pure-form-stacked">
+    <div class="pure-u-1-2">
+        <label for="inpAmount">Amount: </label>
+        <input type="text" id="inpAmount" ng-input-currency ng-model="Reimbursement.Amount" />
+    </div>
+    <div class="pure-u-1-2">
+        <label for="inpCollectedAmount">Collected Amount: </label>
+        <input type="text" id="inpCollectedAmount" ng-input-currency ng-model="Reimbursement.CollectedAmount" />
+    </div>
+</div>
+<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        <a class="pure-button pure-button-primary" id="btnSaveReimbursement" ng-click="saveReimbursement()" ng-disabled="isDisabled">Save</a>&nbsp
+        <a class="pure-button button-plain" id="btnCancelReimbursement" ng-click="cancel()" ng-disabled="isDisabled">Cancel</a>&nbsp
+        <a class="pure-button button-error" id="btnDeleteReimbursement" ng-click="deleteReimbursement()" ng-show="Reimbursement.Id" ng-disabled="isDisabled" >Delete</a>
+    </div>
+</div>

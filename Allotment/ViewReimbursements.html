@@ -1,0 +1,37 @@
+﻿<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        &nbsp<a ng-click="newReimbursement()" id="btnNewReimbursement" class="pure-button pure-button-primary">New Reimbursement</a>
+        &nbsp<a ng-click="cancel()" class="pure-button button-plain" id="btnCancelReimbursement">Back</a>&nbsp
+    </div>
+</div>
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <table class="pure-table pure-table-striped" id="tblReimbursements">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Agreement</th>
+                    <th>Program</th>
+                    <th>Purpose</th>
+                    <th>Amount</th>
+                    <th>Agreement Date</th>
+                </tr>
+            </thead>
+            <tbody>
+				<tr ng-show="Reimbursements.length == 0">
+					<td colspan="6">
+						No Reimbursements Associated
+					</td>
+				</tr>
+                <tr ng-repeat="r in Reimbursements">
+                    <td><a ng-click="editReimbursement($index)" class="pure-button pure-button-primary">Edit</a></td>
+                    <td>{{r.Agreement}}</td>
+                    <td>{{r.Program}}</td>
+                    <td>{{(r.Purpose.length > 15)?(r.Purpose.substr(0,12) + '...'):(r.Purpose)}}</td>
+                    <td>{{r.Amount| currency | negativeParenthesis }}</td>
+                    <td>{{r.Date | date: 'MM/dd/yyyy' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

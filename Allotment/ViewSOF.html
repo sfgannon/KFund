@@ -1,0 +1,27 @@
+﻿<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        &nbsp<a ng-click="newSOF()" id="btnNewSOF" class="pure-button pure-button-primary">New Source of Funds</a>
+        &nbsp<a ng-click="cancel()" id="btnCancelSOF" class="pure-button button-plain">Back</a>&nbsp
+    </div>
+</div>
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <table class="pure-table pure-table-striped" id="tblSOFs">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th ng-repeat="c in SOFs.Cols">{{c}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="s in SOFs.Rows track by $index">
+                    <td><a ng-click="editSOF($index)" class="pure-button pure-button-primary">Edit</a></td>
+                    <td ng-repeat="col in s track by $index">{{(col.Type == 'Text')?(col.Value):(col.Value | currency | negativeParenthesis)}}</td>
+                </tr>
+                <tr><td></td>
+                    <td ng-repeat="to in SOFs.TotalRow track by $index">{{(to.Type == 'Text')?(to.Value):(to.Value | currency | negativeParenthesis)}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

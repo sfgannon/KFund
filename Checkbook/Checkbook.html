@@ -1,0 +1,122 @@
+﻿
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="homeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+
+
+
+
+
+<h4>M/EDCS MASTER CHECKING ACCOUNT</h4>
+<div class="pure-g pure-form">
+	<div class="pure-u-1" style="padding-bottom:10px">		
+		<div class="pure-u-1-3 pure-g" id="fiscalYearDiv" style="padding-top:10px;">			
+			<div class="pure-u-1-4">
+				<label>Fiscal Year:</label>
+			</div>
+			<div class="pure-u-1-4">
+				<select  ng-model="CheckBook.FiscalYear" id="FiscalYear" ng-change="ChangeFiscalYear(CheckBook.FiscalYear)">				
+					<option ng-repeat="FY in ListOfFiscalYears track by $index">{{FY}}</option>				
+				</select>
+			</div>		
+		</div>		
+	</div>
+</div>
+
+
+<ul class="tab" >
+	<li ng-repeat="month in Months track by $index" ><a href="javascript:void(0)"  class="tablinks" ng-click="openTab(event , month.Title)" >{{month.Title}}</a></li>
+</ul>
+
+
+<div ng-repeat="month in Months track by $index"  id={{month.Title}} class="tabcontent padding-row">		
+	<div class="pure-u-2-3" id="checkTableDiv">
+		<table id="checkTable" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Check #</th>
+					<th>Amount</th>
+					<th>Payee</th>
+					<th>Purpose</th>
+				</tr>
+			</thead>
+			<tbody ng-if="month.Payment.length > 0">
+				<tr ng-repeat="obj in month.Payment track by $index">
+					<td>{{obj.Date | date: 'mm/dd/yyyy' }}</td>
+				    <td ng-if="obj.PaymentType == 'Check'"><a ng-click="GoToPayment(obj.ID)">{{ (!!obj.CheckNumber && obj.CheckNumber.length > 0)?(obj.CheckNumber):("Check")}}</a></td>
+				    <td ng-if="obj.PaymentType != 'Check' && obj.ItemType == 'Payment'"><a ng-click="GoToPayment(obj.ID)">{{obj.PaymentType}}</a></td>
+				    <td ng-if="obj.ItemType == 'PaymentReturn'"><a ng-click="GoToPaymentReturn(obj.ID)">Payment Return - {{obj.PaymentReturnType}}</a></td>
+				    <td ng-if="obj.ItemType == 'Deposit'"><a ng-click="GoToDeposit(obj.ID)">{{obj.ItemType}}</a></td>
+				    <td ng-if="obj.ItemType == 'AccountAdjustment'"><a ng-click="GoToAccountAdjustment(obj.ID)">Account Adjustment - {{obj.AdjustmentType}}</a></td>
+					<td>{{obj.Amount| currency | negativeParenthesis}}</td>
+					<td>{{obj.Payee}}</td>
+					<td ng-if="obj.ItemType != 'AccountAdjustment'">{{obj.Purpose}}</td>
+					<td ng-if="obj.ItemType == 'AccountAdjustment'">{{obj.Notes}}</td>
+				</tr>
+			</tbody>
+			<tbody ng-show="month.Payment.length == 0">
+				<tr>
+					<td colspan="5">No Payments for the month of {{month.Title}}</td>
+				</tr>
+			</tbody>
+			
+			
+			<tfoot>
+				<tr style="border-top: 1px solid">
+					<th>{{month.Date}}</th>
+					<th>BALANCE</th>
+					<th>{{month.Total| currency | negativeParenthesis}}</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>	
+</div>
+
+
+
+<style>
+
+	/* Style the list */
+	ul.tab {
+	    list-style-type: none;
+	    margin: 0;
+	    padding: 0;
+	    overflow: hidden;
+	    border: 1px solid #ccc;
+	    background-color: #f1f1f1;
+	}
+	
+	/* Float the list items side by side */
+	ul.tab li {float: left;}
+	
+	/* Style the links inside the list items */
+	ul.tab li a {
+	    display: inline-block;
+	    color: black;
+	    text-align: center;
+	    padding: 14px 16px;
+	    text-decoration: none;
+	    transition: 0.3s;
+	    font-size: 17px;
+	}
+	
+	/* Change background color of links on hover */
+	ul.tab li a:hover {background-color: #ddd;}
+	
+	/* Create an active/current tablink class */
+	ul.tab li a:focus, .active {background-color: #ccc;}
+	
+	/* Style the tab content */
+	.tabcontent {
+	    display: none;
+	    padding: 6px 12px;
+	    border: 1px solid #ccc;
+	    border-top: none;
+	}
+
+</style>

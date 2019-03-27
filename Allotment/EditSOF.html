@@ -1,0 +1,64 @@
+﻿<div id="sofInfo" class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="inpDesc">Description</label>
+            <input style="width:70%;" type="text" ng-model="SOF.Description" id="inpDescription" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="selType">Funding Type</label>
+            <select id="selType" ng-model="SOF.SOFType" style="width:70%;">
+                <option selected></option>
+			<option ng-repeat="option in FundingTypes">{{option.ValueOfItem}}</option>
+			</select>
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-repeat-start="p in SOF.Programs track by $index">
+        <div class="pure-u-1-3">
+            <label for="inpProgram{{$index}}">Program</label>
+            <label id="inpProgram{{$index}}">{{p.Program}}</label>
+        </div>
+        <div class="pure-u-1-3">
+            <label>Unsourced Funds</label>
+            <input type="text" ng-input-currency ng-model="UnsourcedFunds[$index].UnsourcedFunds" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAmount{{$index}}">Amount: </label>
+            <input type="text" id="inpAmount{{$index}}"  ng-input-currency ng-model="SOF.Programs[$index].Amount" ng-value="p.Amount" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="p.Program.indexOf('Rewards') > -1">
+        <div class="pure-u-1-3">
+            <label>Other</label>
+            <input type="text" id="inpOther{{$index}}" ng-input-currency ng-model="SOF.Programs[$index].Other" ng-value="p.Other" />
+        </div>
+        <div class="pure-u-1-3">
+            <label>Unrestricted Funds</label>
+            <input type="text" id="inpUnrestricted{{$index}}" ng-input-currency ng-model="SOF.Programs[$index].UnrestrictedFunds" ng-value="p.UnrestrictedFunds" />
+        </div>
+        <div class="pure-u-1-3">
+            <label>Restricted Funds</label>
+            <input type="text" id="inpRestricted{{$index}}"  ng-input-currency ng-model="SOF.Programs[$index].RestrictedFunds" ng-value="p.RestrictedFunds" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="p.Program.indexOf('Emergencies') > -1">
+        <div class="pure-u-1-3"></div>
+        <div class="pure-u-1-3">
+            <label>Other</label>
+            <input type="text" id="inpUFEOther{{$index}}" ng-input-currency ng-model="SOF.Programs[$index].Other" ng-value="p.Other" />
+        </div>
+        <div class="pure-u-1-3">
+            <label>Evacuations</label>
+            <input type="text" id="inpRestricted{{$index}}"  ng-input-currency ng-model="SOF.Programs[$index].Evacuations" ng-value="p.RestrictedFunds" />
+        </div>
+    </div>
+    <hr ng-repeat-end />
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button pure-primary-button" ng-click="saveSOF()" id="btnSave">Save</a>&nbsp
+            <a class="pure-button button-secondary" id="btnCancel" ng-click="cancel()">Cancel</a>&nbsp
+            <a class="pure-button button-error" id="btnDelete" ng-click="deleteSOF()" ng-show="SOF.Id">Delete</a>
+        </div>
+    </div>
+</div>

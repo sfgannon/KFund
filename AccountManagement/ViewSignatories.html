@@ -1,0 +1,46 @@
+﻿<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="backToAccounts" ui-sref="AccountManagement">Go Back To Accounts</a>
+    </div>
+</div>
+
+
+<h4>View Signatories</h4>
+<div id="AccountInfo">
+	<div class="pure-g" style="padding:5px;" >
+		<div class="pure-u-1">
+			<a id="AddSignatory" class="pure-button button-plain" ui-sref="SignatoryAddEdit">Add Signatories</a>
+		</div>
+	</div>
+	<div class="pure-g">
+		<div class="pure-u-1">
+			<table id="accountTable" class="pure-table pure-table-horizontal pure-table-striped mabel" style="width:90%;">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Bureau</th>
+						<th>Name</th>
+						<th>Phone Number</th>						
+					</tr>
+					<tr>
+				</thead>
+				<tbody>
+				</tbody>
+				<tfoot>
+					<tr ng-if="Signatories.length == 0">
+						<td colspan="4"> There is currently no signatories available. To add click button above table.</td>
+					</tr>
+					<tr ng-repeat="signatory in Signatories">
+						<td>
+						<a ng-disabled="isDisabled" id="edit{{signatory.ValueOfItem}}" class="pure-button pure-button-primary"  ng-click="GoToEditSignatory(signatory.ID)" >Edit</a> 
+						<a ng-disabled="isDisabled" id="delete{{signatory.ValueOfItem}}" class="pure-button button-error"  ng-click="Delete(signatory.ID)" >Delete</a>					
+						</td>
+						<td>{{signatory.FilterValue}}</td>
+						<td>{{signatory.ValueOfItem}}</td>
+						<td>{{signatory.NotesOnItem}}</td>						
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>

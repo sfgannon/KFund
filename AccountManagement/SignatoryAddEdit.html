@@ -1,0 +1,60 @@
+﻿<h4>{{Header}} Signatory </h4>
+
+
+<div class="pure-g pure-form">
+		
+		<div class="pure-u-1" style="padding-bottom:10px">
+			
+			<div class="pure-u-1-3 pure-g" id="nameDiv" style="padding-top:10px;">			
+				<div class="pure-u-1-4">
+					<label>Name:</label>
+				</div>
+				<div class="pure-u-1-2">
+					<input type="text"  style="width:100%;" ng-model="Signatory.ValueOfItem" id="ValueOfItem"/>
+				</div>		
+			</div>
+						
+	
+			<div class="pure-u-1"></div>
+			
+			<div class="pure-u-1-3 pure-g"  id="BureauDiv" >
+				<div class="pure-u-1-4">
+					<label>Bureau:</label>
+				</div>
+				<div class="pure-u-1-2">
+					<select style="width:100%;" ng-model="Signatory.FilterValue" id="FilterOnItem">				
+						<option ng-repeat="option in ListOfOptions.Bureau">{{option.ValueOfItem}}</option>				
+					</select>
+				</div>
+				
+			</div>
+
+
+
+			<div class="pure-u-1"></div>
+			
+			<div class="pure-u-1-3 pure-g"  id="NotesOnItemDiv" style="padding-top:10px;">
+				<div class="pure-u-1-4">
+					<label>Phone:</label>
+				</div>
+				<div class="pure-u-1-2">
+					<input type="tel" placeholder="(xxx) xxx-xxxx"  style="width:100%;" ng-model="Signatory.NotesOnItem" id="NotesOnItem"/>
+				</div>
+			</div>			
+			
+		</div>
+	
+		<div class="pure-u-1"></div>
+		
+		<div class="pure-u-1-3 pure-g" style="padding-top:10px;">
+			<div class="pure-u-1-4">
+				<button type="button" id="Submit"  ng-click="Submit()" class="pure-button button-success" ng-disabled="isDisabled" >Save</button>
+			</div>
+			<div class="pure-u-1-4">
+				<button type="button" id="Cancel"  ui-sref="ViewSignatories"  class="pure-button button-error" ng-disabled="isDisabled" >Cancel</button>
+			</div>
+			<div class="pure-u-1-2">
+				<circle-spinner ng-show="isDisabled"></circle-spinner>
+			</div>
+		</div>		
+	</div>

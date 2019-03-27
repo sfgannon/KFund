@@ -1,0 +1,164 @@
+﻿<div id="programAllotmentInfo">
+	<div name="EditAllotments">
+		<div class="pure-g pure-form" ng-show="viewMode=='view'">
+			<div class="pure-u-2-5">
+				<label for="selChange">Change: </label>
+				<select id="selChange" ng-model="Change" ng-change="getAuth()">
+					<option ng-repeat="c in Auths" ng-selected="c.Change == Change">{{c.Change}}</option>
+				</select>
+			</div>
+			<div class="pure-u-3-5">
+				<a class="pure-button pure-button-primary" id="btnAddAuth" ng-click="addAuth()">New Authorization</a>
+				&nbsp<a class="pure-button button-secondary" id="btnEditAuth" ng-click="editAuth()" ng-show="Auths.length > 0">Edit Last Authorization</a>
+				&nbsp<a class="pure-button button-plain" id="btnCancel"  ng-click="cancel()">Back</a>
+
+			</div>
+		</div>
+		<div class="pure-g pure-form" ng-show="viewMode=='edit'">
+			<div class="pure-u-1-5">
+				<label for="lblChange">Change: </label>
+				<label id="lblChange">{{Auth.Change}}</label>
+			</div>
+			<div class="pure-u-2-5">
+				<label for="inpDate">Date: </label>
+				<input type="date" id="inpDate" data-format="MM/dd/yyyy" ng-model="Auth.Date" />
+			</div>
+			<div class="pure-u-2-5">
+				<a class="pure-button pure-button-primary" id="btnAddProgram" ng-click="addProgram()" ng-hide="UnusedPrograms.length == 0">Add Program</a>
+				&nbsp<a class="pure-button button-secondary" id="btnSaveAuth" ng-click="saveAuth()" ng-disabled="isDisabled">Save</a>
+				&nbsp<a class="pure-button button-plain" id="btnCancelAuth" ng-click="cancelChange()" ng-disabled="isDisabled">Back</a>
+			</div>
+		</div>
+		<div class="padding-row">
+		</div>
+		<div class="pure-g pure-form" ng-show="viewMode=='view'">
+			<div class="pure-u-1">
+				<table class="pure-table pure-table-bordered" id="tblAuths" style="width:90%;">
+					<thead>
+						<tr>
+							<th>Program</th>
+							<th colspan="3">Direct</th>
+							<th colspan="3">Reimbursable</th>
+						</tr>
+						<tr>
+							<th>Fund</th>
+							<th>Previous</th>
+							<th>Modification</th>
+							<th>Authorized</th>
+							<th>Previous</th>
+							<th>Modification</th>
+							<th>Authorized</th>
+						</tr>	
+					</thead>
+					<tbody>
+						<tr ng-repeat="p in Auth.Programs track by $index">
+							<td>{{p.Program}}</td>
+							<td>{{p.Direct.Previous| currency | negativeParenthesis }}</td>
+							<td>{{p.Direct.Mod| currency | negativeParenthesis }}</td>
+							<td>{{p.Direct.Auth| currency | negativeParenthesis }}</td>
+							<td>{{p.Reimbursable.Previous| currency | negativeParenthesis }}</td>
+							<td>{{p.Reimbursable.Mod| currency | negativeParenthesis }}</td>
+							<td>{{p.Reimbursable.Auth| currency | negativeParenthesis }}</td>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td>{{Auth.Direct.PreviousTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Direct.ModTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Direct.AuthTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.PreviousTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.ModTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.AuthTotal| currency | negativeParenthesis }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="pure-g pure-form" ng-show="viewMode=='edit'">
+			<div class="pure-u-1">
+				<table class="pure-table pure-table-bordered" id="tblPrograms" style="width:90%;">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Program</th>
+							<th colspan="3">Direct</th>
+							<th colspan="3">Reimbursable</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th>Fund</th>
+							<th>Previous</th>
+							<th>Modification</th>
+							<th>Authorized</th>
+							<th>Previous</th>
+							<th>Modification</th>
+							<th>Authorized</th>
+						</tr>	
+					</thead>
+					<tbody>
+						<tr ng-repeat="p in Auth.Programs track by $index">
+							<td><a class="pure-button button-secondary" ng-click="editProgram($index)" id="btnEditProgram{{$index}}">
+								Edit</a></td>
+							<td>{{p.Program}}</td>
+							<td>{{p.Direct.Previous| currency | negativeParenthesis }}</td>
+							<td>{{p.Direct.Mod| currency | negativeParenthesis }}</td>
+							<td>{{p.Direct.Auth| currency | negativeParenthesis }}</td>
+							<td>{{p.Reimbursable.Previous| currency | negativeParenthesis }}</td>
+							<td>{{p.Reimbursable.Mod| currency | negativeParenthesis }}</td>
+							<td>{{p.Reimbursable.Auth| currency | negativeParenthesis }}</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>Total</td>
+							<td>{{Auth.Direct.PreviousTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Direct.ModTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Direct.AuthTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.PreviousTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.ModTotal| currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.AuthTotal| currency | negativeParenthesis }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div id="ProgramEditForm" name="ProgramEditForm" class="pure-g pure-form pure-form-stacked" ng-show="viewMode=='editAuth'">
+			<div class="pure-u-1">
+				<label for="selProgram">Program: </label>
+				<select id="selProgram" ng-model="CurrentProgram.Program" ng-show="CurrentProgram.Program == ''">
+					<option ng-repeat="prog in UnusedPrograms">{{prog.ValueOfItem}}</option>
+				</select>
+				<input style="width:50%;" type="text" id="inpSelectedProgram" ng-show="CurrentProgram.Program != ''" ng-model="CurrentProgram.Program" ng-readonly="CurrentProgram.Program" />
+			</div>
+			<div class="pure-u-1-3">
+				<label for="inpDirectPrevious">Direct Previous: </label>
+				<input name="inpDirectPrevious" ng-input-currency id="inpDirectPrevious" ng-model="CurrentProgram.Direct.Previous" ng-disabled="true" />
+			</div>
+			<div class="pure-u-1-3">
+				<label for="inpDirectModification">Direct Modification: </label>
+				<input name="inpDirectModification" ng-input-currency id="inpDirectModification" ng-model="CurrentProgram.Direct.Mod" />
+			</div>
+			<div class="pure-u-1-3">
+				<label for="inpDirectAuth">Direct Authorized: </label>
+				<input name="inpDirectAuth" ng-input-currency id="inpDirectAuth" ng-model="CurrentProgram.Direct.Auth" ng-disabled="true" />
+			</div>
+			<div class="pure-u-1-3">
+				<label for="inpReimbursablePrevious">Reimbursable Previous: </label>
+				<input name="inpReimbursablePrevious" ng-input-currency id="inpReimbursablePrevious" ng-model="CurrentProgram.Reimbursable.Previous" ng-disabled="true" />
+			</div>
+			<div class="pure-u-1-3">
+				<label for="inpReimbursableModification">Reimbursable Modification: </label>
+				<input name="inpReimbursableModification" ng-input-currency id="inpReimbursableModification" ng-model="CurrentProgram.Reimbursable.Mod" />
+			</div>
+			<div class="pure-u-1-3">
+				<label for="inpReimbursableAuth">Reimbursable Authorized: </label>
+				<input name="inpReimbursableAuth"  ng-input-currency id="inpReimbursableMinpReimbursableAuthodification" ng-model="CurrentProgram.Reimbursable.Auth" ng-disabled="true" />
+			</div>
+			<div class="pure-u-1">
+				<a class="pure-button pure-button-primary" id="btnSaveProgram" ng-click="saveProgram()" ng-disabled="isDisabled">Save</a>
+				<a class="pure-button" id="btnCancelProgram" ng-click="cancelProgram()" ng-disabled="isDisabled">Cancel</a>
+			</div>
+		</div>
+
+    </div>
+</div>

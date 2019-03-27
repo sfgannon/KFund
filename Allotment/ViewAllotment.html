@@ -1,0 +1,185 @@
+﻿<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="btnHome" ui-sref="home">Home</a>
+    </div>
+</div>
+<div id="AllotmentInfo">
+	<div class="pure-g" style="padding:5px;" >
+		<div class="pure-u-1" style="width:90%">
+			<a class="pure-button button-plain" id="btnEditInfo" ng-click="editGeneralInfo()">Edit Allotment Information</a>
+			<a style="float: right" class="pure-button button-error" ui-sref="Delete({ id: Allotment.Id })" >Delete Allotment </a>
+		</div>
+	</div>
+	<div class="pure-g">
+		<div class="pure-u-1">
+			<table class="pure-table" id="tblInfo" style="width:90%;">
+				<thead>
+					<tr>
+						<th>Allotment Authority</th>
+						<th>Appropriation</th>
+						<th>NY</th>
+						<th>Agency</th>
+						<th>Change</th>
+						<th>Date</th>
+					</tr>
+					<tr>
+				</thead>
+				<tbody>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>{{Allotment.Authority}}</td>
+						<td>{{Allotment.Appr}}</td>
+						<td>{{Allotment.NY}}</td>
+						<td>{{Allotment.Agency }}</td>
+						<td>{{Auth.Change }}</td>
+						<td>{{(Auth.Date.getMonth() + 1) + "/" + Auth.Date.getDate() + "/" + Auth.Date.getFullYear()}}</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="Authorization">
+    <div class="pure-g" style="padding:5px;">
+		<div class="pure-u-1">
+			<a class="pure-button button-plain" id="btnEditAuth" ng-click="editAuths()" id="mngAuth">Edit Authorizations</a>
+		</div>
+	</div>
+	<div name="Authorizations" class="pure-form">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<table class="pure-table pure-table-bordered" id="tblAuths" style="width:90%;">
+					<thead>
+						<tr>
+							<th>Program</th>
+							<th colspan="3">Direct</th>
+							<th colspan="3">Reimbursable</th>
+						</tr>
+						<tr>
+							<th>Fund</th>
+							<th>Previous</th>
+							<th>Modification</th>
+							<th>Authorized</th>
+							<th>Previous</th>
+							<th>Modification</th>
+							<th>Authorized</th>
+						</tr>	
+					</thead>
+					<tbody>
+						<tr ng-repeat="auth in Auth.Programs">
+							<td>{{auth.Program}}</td>
+							<td>{{auth.Direct.Previous | currency | negativeParenthesis }}</td>
+							<td>{{auth.Direct.Mod | currency | negativeParenthesis }}</td>
+							<td>{{auth.Direct.Auth | currency | negativeParenthesis}}</td>
+							<td>{{auth.Reimbursable.Previous | currency | negativeParenthesis }}</td>
+							<td>{{auth.Reimbursable.Mod | currency | negativeParenthesis }}</td>
+							<td>{{auth.Reimbursable.Auth | currency | negativeParenthesis }}</td>
+						</tr>
+						<tr>
+							<td>Total</td>
+							<td>{{Auth.Direct.PreviousTotal | currency | negativeParenthesis }}</td>
+							<td>{{Auth.Direct.ModTotal | currency | negativeParenthesis }}</td>
+							<td>{{Auth.Direct.AuthTotal | currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.PreviousTotal | currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.ModTotal | currency | negativeParenthesis }}</td>
+							<td>{{Auth.Reimbursable.AuthTotal | currency | negativeParenthesis }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="SOF">
+    <div class="pure-g" style="padding:5px;">
+		<div class="pure-u-1">
+			<a class="pure-button button-plain" id="btnSOF" ng-click="editSOFs()" id="mngAuth">Edit Sources of Funds</a>
+		</div>
+	</div>
+	<div name="SOFs" class="pure-form">
+		<div class="pure-g">
+			<div class="pure-u-1">
+				<table class="pure-table pure-table-bordered" id="tblSOF" style="width:90%;">
+					<thead>
+						<tr>
+							<th ng-repeat="c in SOFTable.Cols">{{c}}</th>
+						</tr>
+					</thead>
+                    <tbody>
+                        <tr ng-repeat="s in SOFTable.Rows">
+                            <td ng-repeat="col in s track by $index">{{(col.Type == 'Text')?(col.Value):(col.Value | currency | negativeParenthesis)}}</td>
+                        </tr>
+						<tr>
+							<td ng-repeat="to in SOFTable.TotalRow track by $index">{{(to.Type == 'Text')?(to.Value):(to.Value | currency | negativeParenthesis)}}</td>
+                		</tr>
+                    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="Reimbursement">
+	<div class="pure-g padding-row">
+		<div class="pure-u-1">
+			<a class="pure-button button-plain" id="btnReimbursement" ng-click="editReimbursements()" id="btnReimbursement">Edit Reimbursements</a>
+		</div>
+	</div>
+	<div class="pure-g pure-form pure-form-stacked">
+		<div class="pure-u-1">
+			<table class="pure-table pure-table-bordered" id="tblReimbursement" style="width:90%;">
+				<thead>
+					<tr>
+						<th>Agreement</th>
+						<th>Program</th>
+						<th>Purpose</th>
+						<th>Amount</th>
+						<th>Agreement Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-show="Reimbursements.length == 0">
+						<td colspan="5">No Reimbursement Associated</td>
+					</tr>
+					<tr ng-repeat="r in Reimbursements">
+						<td>{{r.Agreement}}</td>
+						<td>{{r.Program}}</td>
+						<td>{{(r.Purpose.length > 15)?(r.Purpose.substr(0,12) + '...'):(r.Purpose)}}</td>
+						<td>{{r.Amount | currency | negativeParenthesis }}</td>
+						<td>{{r.Date | date: 'MM/dd/yyyy' }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="Attachments">
+	<div class="pure-g">
+        <div class="pure-u-1">
+            <h3>Attachments</h3>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+		<div class="pure-u-1" ng-show="Allotment.Id"> 
+			<input type="file" id="inpFile" file-model="myFile" file-value="fileData" style="cursor:pointer;display:inline-block;" />&nbsp<a class="pure-button button-plain" style="cursor:pointer;display:inline-block;" ng-click="uploadFile()" id="btnAttach" style="cursor:pointer" ng-disabled="attaching" >Attach File</a><br>
+		</div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-bordered" id="attachmentsTable">
+                <thead><tr><th></th><th>Filename</th></tr></thead>
+                <tbody>
+					<tr ng-show="Attachments.length == 0">
+						<td colspan="2">No Attachments Associated</td>
+					</tr>
+
+                    <tr ng-repeat="e in Attachments track by $index">
+						<td><a ng-click="removeAttachment(e.FileName)" style="cursor:pointer">Delete Attachment</a></td>
+						
+						<td><a target="_blank" href="{{e.ServerRelativeUrl}}">{{e.FileName}}</a></td>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
