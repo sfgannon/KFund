@@ -9,3 +9,4 @@ Each section of the applcation is then broken out into its own folder; and all t
 of reports in the Reports directory.
 Development of this application was done by myself and Josh Smith. Simranpal Singh assisted with testing and
 wrote a number of unit tests using Protractor; unfortunately those are not included in this repository.
+Developed 2015-2017.
