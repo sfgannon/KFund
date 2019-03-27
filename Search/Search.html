@@ -1,0 +1,149 @@
+<div class="pure-form">
+    <div class="pure-g-stacked padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button button-plain" id="HomeBtn" ui-sref="home">Home</a>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <h4>Search</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-8">
+            <label>Fiscal Year</label>
+        </div>
+        <div class="pure-u-2-8">
+            <select ng-model="FiscalYear">
+                <option value=''></option>
+                <option ng-repeat="fy in FiscalYears">{{fy}}</option>
+            </select>
+        </div>
+        <div class="pure-u-5-8"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-8">
+            <label>Appropriation</label>
+        </div>
+        <div class="pure-u-2-8">
+            <select ng-model="Appropriation">
+                <option value=''></option>
+                <option ng-repeat="a in Appropriations">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-8"></div>
+        <div class="pure-u-1-8">
+            <label>Allotment</label>
+        </div>
+        <div class="pure-u-2-8">
+            <select ng-model="Allotment">
+                <option value=''></option>
+                <option ng-repeat="al in Allotments">{{al}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-8"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-8">
+            <label>Operating Allowance</label>
+        </div>
+        <div class="pure-u-2-8">
+            <select ng-model="OperatingAllowance" ng-readonly="Allotment != 1007" ng-disabled="Allotment != 1007">
+                <option value=''></option>
+                <option ng-if="oa != '2003'" ng-repeat="oa in OperatingAllowances">{{oa}}</option>
+            </select>
+        </div>
+        <div class="pure-u-5-8"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-8">
+            <label>Bureau</label>
+        </div>
+        <div class="pure-u-2-8">
+            <select ng-model="Bureau" ng-disabled="AdhocBureau != ''">
+                <option value=''></option>
+                <option ng-repeat="b in Bureaus track by $index">{{b}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-8">
+            <label>Adhoc Bureau</label>
+        </div>
+        <div class="pure-u-2-8">
+            <select ng-model="AdhocBureau" ng-disabled="Bureau != ''">
+                <option value=''></option>
+                <option ng-repeat="b in AdhocBureaus track by $index">{{b}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-8"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-8">
+            <label>Purpose</label>
+        </div>
+        <div class="pure-u-3-8">
+            <input type="text" ng-model="Purpose" />
+        </div>
+        <div class="pure-u-4-8"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" ng-click="Search()">Search</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row" >
+        <circle-spinner ng-show="Searching"></circle-spinner>
+        <div class="pure-u-1" ng-show="!Searching">
+            <table class="pure-table pure-table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Purpose</th>
+                        <th>Amount</th>
+                        <th>Item Type</th>
+                    </tr>
+                </thead>
+                <tbody ng-show="LovArray.length == 0">
+                    <tr>
+                        <td colspan=5>No Search Results</td>
+                    </tr>
+                </tbody>
+                <tbody ng-show="LovArray.length != 0" ng-repeat="object in LovArray">
+                    <tr ng-repeat="r in object.array" ng-if="object.index == ActivePageNumber">
+                        <td><a class="pure-button button-secondary" ng-click="GoToItem(r.Id,r.ItemType)">View</a></td>
+                        <td>{{r.Date}}</td>
+                        <td>{{r.Purpose}}</td>
+                        <td>{{r.Amount | currency | negativeParenthesis}}</td>
+                        <td>{{r.ItemType}}</td>
+                    </tr>
+                </tbody>
+            </table>   
+            <div class="pagination" ng-if="LovArray.length > 0">
+                <a ng-click="pageChange(NumberOfPages[ActivePageNumber].PageNumber - 1)">&laquo;</a>
+                <a ng-repeat="page in NumberOfPages" class={{page.Active}} ng-click="pageChange(page.PageNumber)">{{page.PageNumber}}</a>
+                <a ng-click="pageChange(NumberOfPages[ActivePageNumber].PageNumber + 1)">&raquo;</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+</style>

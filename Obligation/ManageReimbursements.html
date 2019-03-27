@@ -1,0 +1,81 @@
+﻿<div class="pure-form">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Linked Reimbursements</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" id="btnSave" ng-click="cancel()" ng-disabled="isDisabled">Save and Go Back</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-ordered" id="reimbursementsTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Agreement</th>
+                        <th>Purpose</th>
+                        <th>Program</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<tr ng-show="Reimbursements.length == 0">
+                		<td colspan="5">
+                			No Reimbursements Associated
+                		</td>
+                	</tr>
+                    <tr ng-repeat="r in Reimbursements track by $index">
+                        <td><a class="pure-button button-plain" ng-click="removeReimbursement($index)">Remove</a></td>
+                        <td>{{r.Agreement}}</td>
+                        <td>{{r.Purpose}}</td>
+                        <td>{{r.Program}}</td>
+                        <td>{{r.Amount | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Find Reimbursements</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="inpSearch">Search Text: </label><input type="text" ng-model="SearchText" id="inpSearch" style="width:30%;" />
+            <a class="pure-button button-plain" id="btnSearch" ng-click="Search()">Search</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-ordered" id="searchTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Agreement</th>
+                        <th>Purpose</th>
+                        <th>Program</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<tr ng-show="SearchResults.length == 0">
+                		<td colspan="5">
+                			No Search Results
+                		</td>
+                	</tr>
+                    <tr ng-repeat="r in SearchResults track by $index">
+                        <td><a class="pure-button button-plain" ng-click="linkReimbursement($index)">Link</a></td>
+                        <td>{{r.Agreement}}</td>
+                        <td>{{r.Purpose}}</td>
+                        <td>{{r.Program}}</td>
+                        <td>{{r.Amount | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,123 @@
+﻿<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" ui-sref="home">Home</a>
+    </div>
+</div>
+
+
+<h3>View All Notifications</h3>
+
+
+<div class="onoffswitch">
+    <input type="checkbox" name="onoffswitch" ng-model="Notification.Switch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
+    <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
+
+
+<div class="pure-g" ng-if="Notification.Switch == true">
+	<div class="pure-u-1">
+		<table style="width:75%" class="pure-table pure-table-striped pure-table-bordered">
+			<tbody>
+				<tr ng-repeat="a in UnreadAlerts track by $index">
+					<td>
+						{{a.Date}}
+					</td>
+					<td>
+						<strong> {{a.Purpose}}</strong>
+	                	<span class="closebtn"  ng-click="dismissAlert($index)" >&times;</span>
+	                	<p dynamic="a.Notes"></p>					
+					</td>
+				</tr>
+				<tr ng-show="UnreadAlerts.length == 0">
+					<td>
+						<strong> No Unread Notifications </strong>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="pure-g" ng-if="Notification.Switch == false">
+	<div class="pure-u-1">
+		<table style="width:75%" class="pure-table pure-table-striped pure-table-bordered">
+			<tbody>
+				<tr ng-repeat="a in Alerts track by $index">
+					<td>
+						{{a.Date}}
+					</td>
+					<td>
+						<strong> {{a.Purpose}}</strong>
+	                	
+	                	<p dynamic="a.Notes"></p>					
+					</td>
+				</tr>
+				<tr ng-show="Alerts.length == 0">
+					<td>
+						<strong> There Are No Notifications </strong>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script>
+$('#myonoffswitch').attr('checked', true);
+$('#myonoffswitch').prop('checked', true);
+</script>
+
+
+<style>
+
+.onoffswitch {
+    position: relative; width: 90px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 2px solid #999999; border-radius: 20px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
+    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "Unread";
+    padding-left: 10px;
+    background-color: #72C97E; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "All";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 15px; margin: 7.5px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 56px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+</style>

@@ -1,0 +1,105 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <h3>Obligation</h3>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <label for="inpPurpose">Purpose</label>
+            <input type="text" ng-model="Obligation.Purpose" id="inpPurpose" style="width:60%;" />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label for="inpDate">Date</label>
+            <input type="date" id="inpDate" ng-model="Obligation.Date" data-format="MM/dd/yyyy" />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label for="selAppropriation">Appropriation</label>
+            <select id="selAppropriation" ng-model="Obligation.Appropriation" >
+                <option ng-repeat="ap in Appropriations">{{ap}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3">
+            <label for="Allotment">Allotment</label>
+            <select id="Allotment" ng-change="AllotmentChange()" ng-model="Obligation.Allotment">
+                <option ng-repeat="a in Allotments">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3" ng-show="Obligation.Allotment == 1007">
+            <label for="selOperatingAllowance">Operating Allowance</label>
+            <select id="selOperatingAllowance" ng-change="changeOperatingAllowance()" ng-model="Obligation.OperatingAllowance">
+                <option ng-repeat="o in OperatingAllowances" ng-if="o != '2003'">{{o}}</option>
+            </select>
+        </div>
+        <!--<div class="pure-u-1" ng-show="Obligation.Allotment == 2003">
+            <label for="selPostCode">Post Code</label>
+            <select id="selPostCode" ng-change="changePostCode()" ng-model="Obligation.PostCode">
+                <option ng-repeat="o in PostCodes track by $index"  value={{o.NotesOnItem}} >{{o.ValueOfItem}} - {{o.NotesOnItem}} </option>
+            </select>
+        </div>
+    </div>-->
+    <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Obligation.Allotment == 2003">
+        <div class="pure-u-1-3">
+            <label for="selCountry">Country</label>
+            <select ng-model="Country" id="selCountry" style="width:90%;" ng-change="UpdatePosts()">
+                <option ng-repeat="c in Countries">{{c.ValueOfItem}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3">
+            <label for="selPost">Post</label>
+            <select ng-model="Obligation.PostCode" id="selPost" ng-change="changePostCode()" style="width:90%;">
+                <option ng-repeat="o in PostCodes" value={{o.NotesOnItem}} > {{o.ValueOfItem}} - {{o.NotesOnItem}} </option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label for="inpObligationNumber">Obligation Number</label>
+            <input type="text" id="inpObligationNumber" ng-model="Obligation.ObligationNumber"  />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <label for="taDesc">Description</label>
+            <textarea id="taDesc" rows="5" cols="50" ng-model="Obligation.Description" />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label for="inpAmount">Amount</label>
+            <input type="text"  ng-input-currency id="inpAmount" ng-model="Obligation.Amount" />
+        </div>
+        <div class="pure-u-1-3" ng-show="Obligation.OperatingAllowance == 100710 && Obligation.Allotment == '1007'">
+            <label for="inpAmount">Restricted Funds</label>
+            <input type="text"  ng-input-currency id="inpAmount" ng-model="Obligation.RestrictedFunds" />
+        </div>
+    </div>
+    <div class="pure-g" ng-show="Obligation.OperatingAllowance == 100710 && Obligation.Allotment == '1007'">
+        <div class="pure-u-1-3">
+            <label>Rewards Publicity</label>
+            <input type="checkbox" ng-model="Obligation.RewardsPublicity" id="chkRewardsPublicity" />
+        </div>
+        <div class="pure-u-1-2">
+            <label>Rewards Program</label>
+            <select id="selRewardsProgram" ng-model="Obligation.RewardsProgram">
+                <option ng-repeat="r in RewardsPrograms">{{r}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" ng-click="saveObligation()" id="btnSave" ng-disabled="isDisabled">Save</a>&nbsp
+            <a class="pure-button button-secondary" id="btnCancel" ng-click="cancel()" ng-disabled="isDisabled">Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+
+

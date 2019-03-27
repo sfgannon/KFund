@@ -1,0 +1,93 @@
+﻿
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="homeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+
+
+<h4>Choose Field to Update </h4>
+<div class="pure-g pure-form">
+	
+	<div class="pure-u-1" style="padding-bottom:10px">		
+		<div class="pure-u-1-3 pure-g" id="operatingAllowanceDiv" style="padding-top:10px;">			
+			<div class="pure-u-1-4">
+				<label>Type:</label>
+			</div>
+			<div class="pure-u-1-2">
+				<select style="width:100%;" ng-model="LOV.Type" id="Type" ng-change="SearchLOVs(LOV.Type)">				
+					<option ng-repeat="type in ListOfOptions">{{type}}</option>				
+				</select>
+			</div>		
+		</div>		
+	</div>
+	
+	
+	<div class="pure-u-1" style="padding-bottom:10px" ng-show="ShowResults">			
+			<div class="pure-u-1-2">
+				<div>
+					<button type="button" id="Add" style="padding-bottom:10px" ng-click="Add( LOV.Type )"  ng-hide="LOV.Type == 'Account'" class="pure-button button-success">Add {{SearchResultsTableHeader}}</button>			  		  
+				</div>
+		  
+			  <table id="searchResults" style="width:100%;margin-top:10px" class="pure-table pure-table-horizontal pure-table-striped mabel">
+				  <thead>
+					  <tr>
+					    <th></th>			    
+					    <th>{{SearchResultsTableHeader}}</th>
+					    <th ng-if="LOV.Type == 'OperatingAllowance' ">Purpose</th>
+					    <th ng-if="LOV.Type == 'PostCode' ">Location</th>
+					  </tr>
+				  </thead>	
+				<tbody ng-show="LovArray.length == 0">
+					<tr >
+						<td colspan="6">No Avaliable List of Values for this type</td>
+					</tr>
+				</tbody>
+				
+				<tbody ng-show="LovArray.length != 0" ng-repeat="object in LovArray">
+					<tr ng-repeat="result in object.array" ng-if="object.index == ActivePagenumber">
+						<td>
+							<button type="button" id="Edit"  ng-click="Edit(result)" class="pure-button pure-button-primary" ng-hide="result.TypeOfItem == 'Account'">Edit</button> 
+							<button type="button" id="EditAccount"  ng-click="GoToEditAccount(result.ID)" class="pure-button pure-button-primary"" ng-show="result.TypeOfItem == 'Account'">Edit</button> 							
+							<button type="button" id="Delete"  ng-click="Delete(result)" class="pure-button button-error">Delete</button>
+						</td>
+						<td>{{result.ValueOfItem}}</td>	  
+						<td ng-if="LOV.Type == 'OperatingAllowance' || LOV.Type == 'PostCode'">{{result.NotesOnItem}}</td>	  
+					</tr>
+				</tbody>
+			  </table>
+			  
+				<div class="pagination">
+					<a >&laquo;</a>
+					<a ng-repeat="page in NumberOfPages" class={{page.Active}} ng-click="pageChange(page.PageNumber)">{{page.PageNumber}}</a>
+					<a >&raquo;</a>
+				</div>
+			  
+			</div>	
+			
+
+	
+	</div>
+
+	
+	
+</div>
+<style>
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+</style>

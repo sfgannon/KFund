@@ -1,0 +1,88 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button button-plain" ui-sref="home" id="btnHome">Home</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Generate Fund Cite</h4>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <a href="https://medcs.ses.state.sbu/Internal/Shared%20Documents/KFundFiscalData.doc">KFund Fiscal Data Sheet</a>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <label for="inpPurpose">Purpose: </label>
+            <input type="text" ng-model="Obligation.Purpose" id="inpPurpose" style="width:60%;" />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label for="selAppropriation">Appropriation</label>
+            <select id="selAppropriation" ng-model="Obligation.Appropriation" >
+                <option ng-repeat="ap in Appropriations">{{ap}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3">
+            <label for="Allotment">Allotment: </label>
+            <select id="Allotment" ng-change="AllotmentChange()" ng-model="Obligation.Allotment">
+                <option ng-repeat="a in Allotments">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3" ng-show="Obligation.Allotment == 1007">
+            <label for="selOperatingAllowance">Operating Allowance: </label>
+            <select id="selOperatingAllowance" ng-change="changeOperatingAllowance()" ng-model="Obligation.OperatingAllowance">
+                <option ng-if="o != '2003'" ng-repeat="o in OperatingAllowances">{{o}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Obligation.Allotment == '2003'">
+        <div class="pure-u-1-3">
+            <label for="selCountry">Country</label>
+            <select ng-model="Country" id="selCountry" style="width:90%;" ng-change="UpdatePosts()">
+                <option ng-repeat="c in Countries">{{c.ValueOfItem}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3">
+            <label for="selPost">Post</label>
+            <select ng-model="Obligation.PostCode" id="selPost" ng-change="changePostCode()" style="width:90%;">
+                <option ng-repeat="o in PostCodes" value={{o.NotesOnItem}} > {{o.ValueOfItem}} - {{o.NotesOnItem}} </option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label for="inpObligationNumber">Obligation Number: </label>
+            <input type="text" ng-model="Obligation.ObligationNumber" id="inpObligationNumber" ng-change="changeObligationNumber()"/>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <label for="taDesc">Description: </label>
+            <textarea id="taDesc" rows="5" cols="50" ng-model="Obligation.Description" />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <label for="inpAmount">Amount: </label>
+            <input type="text" ng-input-currency  id="inpAmount" ng-model="Obligation.Amount" />
+        </div>
+    </div>
+    <div class="pure-g padding-row pure-form-stacked">
+        <div class="pure-u-1">
+            <label for="inpFundCiteNumber">Fund Cite Number</label>
+            <input type="text" id="inpFundCiteNumber" ng-model="FundCite.FundCiteNumber" ng-readonly="true" style="width:50%"; />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" id="btnSave" ng-click="Save()"  ng-disabled="isDisabled">Save</a>&nbsp
+            <a class="pure-button button-plain" id="btnCancel" ng-click="cancel()" ng-disabled="isDisabled">Cancel</a>
+        </div>
+    </div>
+</div>

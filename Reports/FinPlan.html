@@ -1,0 +1,388 @@
+﻿<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="HomeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+
+	<div class="pure-u-1" style="padding-bottom:10px">		
+		<div class="pure-u-1-3 pure-g pure-form" id="fiscalYearDiv" style="padding-top:10px;">			
+			<div class="pure-u-1-4">
+				<label>Fiscal Year:</label>
+			</div>
+			<div class="pure-u-1-4">
+				<select  ng-model="FinPlan.FiscalYear" id="FiscalYear" ng-change="ChangeFiscalYear(FinPlan.FiscalYear)">				
+					<option ng-repeat="FY in ListOfFiscalYears">{{FY}}</option>				
+				</select>
+			</div>		
+		</div>		
+	</div>
+
+
+<ul class="tab">
+	<li><a href="javascript:void(0)" class="tablinks" ng-click="openTab(event , 'Totals')" >Totals</a></li>
+	<li ng-repeat="OA in TabOptions" ng-if="OA.TypeOfItem == 'OperatingAllowance'" ><a href="javascript:void(0)"  class="tablinks" ng-click="openTab(event , OA.ValueOfItem)" >{{OA.ValueOfItem}}</a></li>
+	<li><a href="javascript:void(0)" class="tablinks" ng-click="openTab(event , '2003Breakout')" >2003 Breakout</a></li>
+	<li ng-repeat="Approp in TabOptions" ng-if="Approp.TypeOfItem == 'Appropriation' && Approp.ValueOfItem != '0522'" ><a href="javascript:void(0)" class="tablinks" ng-click="openTab(event , Approp.ValueOfItem)" >{{Approp.ValueOfItem}}</a></li>
+</ul>
+
+<div ng-repeat="OA in TabOptions"  ng-if="OA.TypeOfItem == 'OperatingAllowance'" id={{OA.ValueOfItem}} class="tabcontent padding-row">	
+	<div id="{{OA.ValueOfItem}}TableDiv">
+		<table id="{{OA.ValueOfItem}}Table" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+		  <tr>
+		    <th>Date</th>
+		    <th>Oblig #</th>
+		    <th>Check #</th>
+		    <th>Check Amount</th>
+		    <th>Obligation Amount</th>
+		    <th>Liquidated</th>
+		    <th>Unliquidated</th>
+		    <th>Total Obligation</th>
+		    <th>Description</th>
+		  </tr>
+		  <tr ng-repeat="obj in AllTransactions" ng-if="obj.OperatingAllowance == OA.ValueOfItem && obj.Appropriation == '0522' || obj.OperatingAllowance == OA.ValueOfItem && obj.ItemType == 'AccountAdjustment'">
+		    <!--First Column - Date -->
+			<td ng-if="obj.ItemType != 'Adjustment'">{{obj.Date}}</td>
+			<td ng-if="obj.ItemType == 'Adjustment'"></td>
+
+			<!--Second Column - Obligation # -->
+		    <td ng-if="obj.ItemType == 'Obligation'"><a ng-click="GoToObligation(obj.ID)">{{obj.ObligationNumber}}</a></td>
+		    <!--<td ng-if="obj.ItemType == 'Payment'">{{obj.ObligationNumber}}</td>
+		    <td ng-if="obj.ItemType == 'PaymentReturn'">{{obj.ObligationNumber}}</td>
+		    <td ng-if="obj.ItemType == 'Deposit'">{{obj.ObligationNumber}}</td>
+		    <td ng-if="obj.ItemType == 'AccountAdjustment'"></td>-->
+			<td ng-if="obj.ItemType != 'Obligation' && obj.ItemType != 'Adjustment'"></td>
+			<td ng-if="obj.ItemType == 'Adjustment'"><a ng-click="GoToAdjustment(obj.ID)">{{obj.Purpose}}</a></td>
+		    
+			<!--Third Column - Check # -->
+		    <td ng-if="obj.PaymentType == 'Check'"><a ng-click="GoToPayment(obj.ID)">{{obj.CheckNumber}}</a></td>
+		    <td ng-if="obj.PaymentType != 'Check' && obj.ItemType != 'PaymentReturn' && obj.ItemType != 'Deposit' && obj.ItemType != 'AccountAdjustment' && obj.PaymentType != 'Space' "><a ng-click="GoToPayment(obj.ID)">{{obj.PaymentType}}</a></td>
+		    <td ng-if="obj.ItemType == 'PaymentReturn'"><a ng-click="GoToPaymentReturn(obj.ID)">Payment Return - {{obj.PaymentReturnType}}</a></td>
+			<td ng-if="obj.ItemType == 'Deposit'"><a ng-click="GoToDeposit(obj.ID)">{{obj.ItemType}}</a></td>
+			<td ng-if="obj.ItemType == 'AccountAdjustment'"><a ng-click="GoToAccountAdjustment(obj.ID)">Account Adjustment - {{obj.AdjustmentType}}</a></td>
+			<td ng-if="obj.ItemType == 'Space'"></td>
+		    
+
+			<!-- Fourth Column - Check Amount -->
+ 			<td ng-if="obj.ItemType == 'Payment' || obj.ItemType == 'PaymentReturn' || obj.ItemType == 'Deposit'|| obj.ItemType == 'AccountAdjustment'">{{obj.Amount | currency | negativeParenthesis}}</td>
+ 			<td ng-if="obj.ItemType == 'Obligation' || obj.ItemType == 'Adjustment'">$0.00</td>
+			<td ng-if="obj.ItemType == 'Space'"></td>
+ 			
+		   <!-- Fifth Column - Obligation Amount -->
+ 			<td ng-if="obj.ItemType == 'Obligation' || obj.ItemType == 'Adjustment'">{{obj.Amount | currency | negativeParenthesis}}</td>
+ 			<td ng-if="obj.ItemType != 'Obligation' && obj.ItemType != 'Space' && obj.ItemType != 'Adjustment'">$0.00</td>
+ 			<td ng-if="obj.ItemType == 'Space' "></td>
+		    
+			<!-- Sixth Column - Liquidated -->
+		    <td ng-if="obj.PaymentType == 'Check' || obj.PaymentType == 'EFT' || obj.PaymentType == 'SPS Transfer' ">$0.00</td>		  		    
+		    <td ng-if="obj.PaymentType != 'Check' && obj.PaymentType != 'EFT' && obj.PaymentType != 'SPS Transfer' && obj.PaymentType != 'Space' && obj.ItemType != 'Adjustment'">{{obj.LiquidatedAmount | currency | negativeParenthesis}}</td>
+			<td ng-if='obj.ItemType == "Adjustment"'>{{obj.Amount | currency | negativeParenthesis}}</td>
+ 			<td ng-if="obj.ItemType == 'Space' "></td>
+		    
+			 <!--Seventh Column - Unliquidated-->
+		    <td ng-if="obj.PaymentType == 'Check' || obj.PaymentType == 'EFT' || obj.PaymentType == 'SPS Transfer' || obj.ItemType == 'Adjustment' ">$0.00</td>
+		    <td ng-if="obj.PaymentType != 'Check' && obj.PaymentType != 'EFT' && obj.PaymentType != 'SPS Transfer' && obj.PaymentType != 'Space' && obj.ItemType != 'Adjustment' ">{{obj.UnliquidatedAmount | currency | negativeParenthesis}}</td>
+			<td ng-if="obj.ItemType == 'Space' "></td>
+		    
+		    <!-- Total Obligation -->
+		    <td ng-if="obj.ItemType != 'Space'">{{obj.Total | currency | negativeParenthesis}}</td>
+			<td ng-if="obj.ItemType == 'Space'"></td>
+		    
+			<!-- Description -->
+		    <td ng-if="obj.ItemType == 'Obligation'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'Payment'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'PaymentReturn'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'Deposit'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'AccountAdjustment'">{{obj.Notes}}</td>
+		    <td ng-if="obj.ItemType == 'Adjustment'">{{obj.Desc}}</td>
+			<td ng-if="obj.ItemType == 'Space'"></td>
+		  </tr> 
+		  <tr ng-repeat="total in ArrayOfTotalsObjects" ng-if="total.OperatingAllowance == OA.ValueOfItem ">
+		    <th></th>
+		    <th></th>
+		    <th>Total:</th>
+		    <th>{{total.CheckAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.ObligationAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.LiquidatedAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.UnliquidatedAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.TotalOfTotal | currency | negativeParenthesis}}</th>
+		    <th></th>
+		  </tr>
+		</table>
+	</div>	
+</div>
+
+<div  id="2003Breakout" class="tabcontent">	
+	<div id="2003BreakoutableDiv">
+		<table id="2003BreakoutTable" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+		
+			<tr>
+			    <th>Date</th>
+			    <th>Oblig #</th>
+			    <th>Check #</th>
+			    <th>Check Amount</th>
+			    <th>Obligation Amount</th>
+			    <th>Liquidated</th>
+			    <th>Unliquidated</th>
+			    <th>Total Obligation</th>
+			    <th>Description</th>
+			</tr>
+
+			<tbody ng-repeat="object in BreakoutTable">
+				<tr ng-if="object.ItemType == 'Space'">
+					<td colspan="9"> </td>				
+				</tr>
+				<tr ng-if="object.ItemType == 'Description'">
+					<td colspan="8"> </td>
+					<td>{{object.description }}</td>				
+				</tr>				
+				<tr ng-if="object.ItemType == 'Transactions'">
+					<tr ng-repeat="item in object.Transactions ">
+						<!-- Date -->
+						<td>{{item.Date | date: 'mm/dd/yyyy' }} </td>
+						<!-- Obligation Number -->
+						<td ng-if="item.ItemType == 'Obligation'"><a ng-click="GoToObligation(item.ID)">{{item.ObligationNumber}}</a></td>
+						<td ng-if="item.ItemType == 'Adjustment'"><a ng-click="GoToAdjustment(item.ID)">{{item.ObligationNumber}}
+						<!-- Check Number -->
+						<td> </td>						
+						<!-- Check Amount -->
+						<td>$0.00</td>
+						<!-- Obilgation Amount -->
+						<td>{{item.Amount | currency | negativeParenthesis}}</td>
+						<!-- Obilgation Liquidated & Unliquidated Amount-->
+					    <td>{{item.LiquidatedAmount | currency | negativeParenthesis}}</td>
+					    <td>{{item.UnliquidatedAmount | currency | negativeParenthesis}}</td>
+					    <!-- Total Obilgation Amount -->
+						<td>{{item.Amount | currency | negativeParenthesis}}</td>
+						<!-- Description -->
+						<td> </td>				
+					</tr>			
+				</tr>
+				<tr ng-if="object.ItemType == 'Totals'">
+					<th></th>
+					<th></th>
+					<th></th>
+					<th>{{object.CheckAmount | currency | negativeParenthesis}}</th>
+					<th >{{object.ObligationAmount | currency | negativeParenthesis}}</th>
+					<th>{{object.LiquidatedAmount | currency | negativeParenthesis}}</th>	
+					<th >{{object.UnliquidatedAmount | currency | negativeParenthesis}}</th>
+					<th>{{object.ObligationAmount | currency | negativeParenthesis}}</th>		
+					<th></th>
+				</tr>
+			</tbody>	
+		</table>
+	</div>	
+</div>
+
+
+
+<div ng-repeat="OA in TabOptions" id={{OA.ValueOfItem}} class="tabcontent">	
+	<div id="non0522TableDiv">
+		<table id="non0522Table" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+		  <tr>
+		    <th>Date</th>
+		    <th>Oblig #</th>
+		    <th>Check #</th>
+		    <th>Check Amount</th>
+		    <th>Obligation Amount</th>
+		    <th>Liquidated</th>
+		    <th>Unliquidated</th>
+		    <th>Total Obligation</th>
+		    <th>Description</th>
+		  </tr>
+		  <tr ng-repeat="obj in AllTransactions" ng-if="obj.Appropriation == OA.ValueOfItem" >
+		    <td>{{obj.Date}}</td>
+
+
+		    <td ng-if="obj.ItemType == 'Obligation'"><a ng-click="GoToObligation(obj.ID)">{{obj.ObligationNumber}}</a></td>
+		    <td ng-if="obj.ItemType == 'Payment'">{{obj.ObligationNumber}}</td>
+		    <td ng-if="obj.ItemType == 'PaymentReturn'">{{obj.ObligationNumber}}</td>
+		    <td ng-if="obj.ItemType == 'Deposit'">{{obj.ObligationNumber}}</td>
+		    <td ng-if="obj.ItemType == 'AccountAdjustment'"></td>
+
+		    
+		    <td ng-if="obj.PaymentType == 'Check'"><a ng-click="GoToPayment(obj.ID)">{{obj.CheckNumber}}</a></td>
+		    <td ng-if="obj.PaymentType != 'Check' && obj.ItemType != 'PaymentReturn' && obj.ItemType != 'Deposit'&& obj.ItemType != 'AccountAdjustment' "><a ng-click="GoToPayment(obj.ID)">{{obj.PaymentType}}</a></td>
+		    <td ng-if="obj.ItemType == 'PaymentReturn'"><a ng-click="GoToPaymentReturn(obj.ID)">Payment Return - {{obj.PaymentReturnType}}</a></td>
+			<td ng-if="obj.ItemType == 'Deposit'"><a ng-click="GoToDeposit(obj.ID)">{{obj.ItemType}}</a></td>
+			<td ng-if="obj.ItemType == 'AccountAdjustment'"><a ng-click="GoToAccountAdjustment(obj.ID)">Account Adjustment - {{obj.AdjustmentType}}</a></td>
+		    
+ 			<td ng-if="obj.ItemType == 'Payment' || obj.ItemType == 'PaymentReturn' || obj.ItemType == 'Deposit'">{{obj.Amount | currency | negativeParenthesis}}</td>
+ 			<td ng-if="obj.ItemType == 'Obligation' ">$0.00</td>
+
+
+ 			<td ng-if="obj.ItemType == 'Obligation'">{{obj.Amount | currency | negativeParenthesis}}</td>
+ 			<td ng-if="obj.ItemType != 'Obligation'">$0.00</td>
+		    
+		    <td ng-if="obj.PaymentType == 'Check' || obj.PaymentType == 'EFT' || obj.PaymentType == 'SPS Transfer' ">$0.00</td>		  		    
+		    <td ng-if="obj.PaymentType != 'Check' && obj.PaymentType != 'EFT' && obj.PaymentType != 'SPS Transfer' ">{{obj.LiquidatedAmount | currency | negativeParenthesis}}</td>
+		    
+		    <td ng-if="obj.PaymentType == 'Check' || obj.PaymentType == 'EFT' || obj.PaymentType == 'SPS Transfer' ">$0.00</td>
+		    <td ng-if="obj.PaymentType != 'Check' && obj.PaymentType != 'EFT' && obj.PaymentType != 'SPS Transfer' ">{{obj.UnliquidatedAmount | currency | negativeParenthesis}}</td>
+		    
+		    
+		    <td>{{obj.Total | currency | negativeParenthesis}}</td>
+		    
+		    <td ng-if="obj.ItemType == 'Obligation'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'Payment'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'PaymentReturn'">{{obj.Purpose}}</td>
+		    <td ng-if="obj.ItemType == 'Deposit'">{{obj.Purpose}}</td>
+   		    <td ng-if="obj.ItemType == 'AccountAdjustment'">{{obj.Notes}}</td>
+		  </tr> 
+		  <tr ng-repeat="total in ArrayOfTotalsObjects" ng-if="total.OperatingAllowance == OA.ValueOfItem ">
+		    <th></th>
+		    <th></th>
+		    <th>Total:</th>
+		    <th>{{total.CheckAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.ObligationAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.LiquidatedAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.UnliquidatedAmountTotal | currency | negativeParenthesis}}</th>
+		    <th>{{total.TotalOfTotal | currency | negativeParenthesis}}</th>
+		    <th></th>
+		  </tr>
+
+		</table>
+	</div>	
+</div>
+
+
+<div  id="Totals" class="tabcontent">	
+	<div id="TotalsTableDiv">
+		<table id="TotalsTable" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+		  <tr>		    
+		    <th>Check Amounts</th>
+		    <th>Operating Allowance</th>
+		    <th>Obligations</th>
+		    <th>Liquidated Amounts</th>
+		    <th>Unliquidated Amounts</th>
+		    <th>Total Obligation</th>
+		    <th>Purpose</th>
+		  </tr>
+		  <tr ng-repeat="row in Totals.ArrayOfOperatingAllowanceTotals" ng-if="row.OperatingAllowance != '2003'" >
+			<td>{{row.CheckAmount | currency | negativeParenthesis}}</td>
+			<td>{{row.OperatingAllowance}}</td>
+			<td>{{row.Obligation | currency | negativeParenthesis}}</td>
+			<td>{{row.LiquidatedBalance | currency | negativeParenthesis}}</td>
+			<td>{{row.UnliquidatedBalance | currency | negativeParenthesis}}</td>
+			<td>{{row.Obligation | currency | negativeParenthesis}}</td>
+			<td>{{row.Purpose}}</td>
+		  </tr>
+		  <tr>		    
+		    <th>{{Totals.CheckAmountsTotal | currency | negativeParenthesis}}</th>
+		    <th>TOTAL</th>
+		    <th>{{Totals.ObligationsTotal | currency | negativeParenthesis}}</th>
+		    <th>{{Totals.LiquidatedBalanceTotal | currency | negativeParenthesis}}</th>
+		    <th>{{Totals.UnliquidatedBalanceTotal | currency | negativeParenthesis}}</th>
+		    <th>{{Totals.ObligationsTotal | currency | negativeParenthesis}}</th>
+		    <th></th>
+		  </tr>
+
+
+		</table>
+		<br>
+		<table class="pure-table pure-table-striped pure-table-horizontal">
+			<tbody>
+				<tr>
+					<td>{{TotalTab.ObligationAllotmentRows[0]["Amount"] | currency | negativeParenthesis}}</td>
+					<td>Allot 1007 - Regular</td>
+				</tr>
+				<tr>
+					<td>{{TotalTab.ObligationAllotmentRows[1]["Amount"] | currency | negativeParenthesis}}</td>
+					<td>{{TotalTab.ObligationAllotmentRows[1]["Allotment"]}}</td>
+				</tr>
+				<tr>
+					<td>{{TotalTab.ObligationAllotmentRows[2]["Amount"] | currency | negativeParenthesis}}</td>
+					<td>{{TotalTab.ObligationAllotmentRows[2]["Allotment"]}}</td>
+				</tr>
+				<tr>
+					<td>{{TotalTab.ObligationAllotmentRows[3]["Amount"] | currency | negativeParenthesis}}</td>
+					<td>{{TotalTab.ObligationAllotmentRows[3]["Allotment"]}}</td>
+				</tr>
+				<tr>
+					<th>{{TotalTab.ObligationAllotmentTotal["Amount"] | currency | negativeParenthesis}}</th>
+					<th>{{TotalTab.ObligationAllotmentTotal["Allotment"]}}</th>
+				</tr>
+			</tbody>
+		</table>
+		<br>
+		<table class="pure-table pure-table-striped pure-table-horizontal">
+			<tbody>
+				<tr>
+					<th>1007</th>
+					<th>2003</th>
+					<th>Total</th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>{{TotalTab.AllotmentRows[0]['1007'] | currency | negativeParenthesis }}</td>
+					<td>{{TotalTab.AllotmentRows[0]['2003'] | currency | negativeParenthesis}}</td>
+					<td>{{TotalTab.AllotmentRows[0]['Total'] | currency | negativeParenthesis}}</td>
+					<td>Regular</td>
+				</tr>
+				<tr>
+					<td>{{TotalTab.AllotmentRows[1]['1007'] | currency | negativeParenthesis }}</td>
+					<td>{{TotalTab.AllotmentRows[1]['2003'] | currency | negativeParenthesis}}</td>
+					<td>{{TotalTab.AllotmentRows[1]['Total'] | currency | negativeParenthesis}}</td>
+					<td>Funding W/D for Prior Years</td>
+				</tr>
+				<tr>
+					<td>{{TotalTab.AllotmentRows[2]['1007'] | currency | negativeParenthesis }}</td>
+					<td>{{TotalTab.AllotmentRows[2]['2003'] | currency | negativeParenthesis}}</td>
+					<td>{{TotalTab.AllotmentRows[2]['Total'] | currency | negativeParenthesis}}</td>
+					<td>Upward Spending Adj-Out</td>
+				</tr>
+				<tr>
+					<th>{{TotalTab.AllotmentTotalRow['1007'] | currency | negativeParenthesis }}</th>
+					<th>{{TotalTab.AllotmentTotalRow['2003'] | currency | negativeParenthesis}}</th>
+					<th>{{TotalTab.AllotmentTotalRow['Total'] | currency | negativeParenthesis}}</th>
+					<th>Total K Fund</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<style>
+
+	/* Style the list */
+	ul.tab {
+	    list-style-type: none;
+	    margin: 0;
+	    padding: 0;
+	    overflow: hidden;
+	    border: 1px solid #ccc;
+	    background-color: #f1f1f1;
+	}
+	
+	/* Float the list items side by side */
+	ul.tab li {float: left;}
+	
+	/* Style the links inside the list items */
+	ul.tab li a {
+	    display: inline-block;
+	    color: black;
+	    text-align: center;
+	    padding: 14px 16px;
+	    text-decoration: none;
+	    transition: 0.3s;
+	    font-size: 17px;
+	}
+	
+	/* Change background color of links on hover */
+	ul.tab li a:hover {background-color: #ddd;}
+	
+	/* Create an active/current tablink class */
+	ul.tab li a:focus, .active {background-color: #ccc;}
+	
+	/* Style the tab content */
+	.tabcontent {
+	    display: none;
+	    padding: 6px 12px;
+	    border: 1px solid #ccc;
+	    border-top: none;
+	}
+	
+}
+
+</style>
+

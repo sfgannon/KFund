@@ -1,0 +1,45 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button button-plain" id="HomeBtn" ui-sref="home">Home</a>
+        </div>
+    </div>
+    <h4>Manage RPPs</h4>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-2">
+            <label>Rewards Program</label>
+            <select id="selProgram" ng-model="RPP.RewardsProgram" ng-change="changeProgram()">
+                <option ng-repeat="p in RewardsPrograms track by $index">{{p}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-2">
+            <label>Date</label>
+            <input type="date" id="inpDate" ng-model="RPP.Date" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a ng-click="createRPP()" class="pure-button pure-button-primary" id="btnCreateRPP" ng-disabled="isDisabled">Create RPP</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table id="RppTable" class="pure-table pure-table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>RPP</th>
+                        <th>Rewards Program</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="r in RPPs track by $index">
+                        <td><a class="pure-button button-plain" id="btnView{{$index}}" ng-click="ViewRPP($index)">View</a></td>
+                        <td>{{r.RPP}}</td>
+                        <td>{{r.RewardsProgram}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

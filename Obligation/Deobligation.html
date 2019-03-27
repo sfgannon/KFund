@@ -1,0 +1,62 @@
+﻿<h4>Deobligation</h4>
+<circle-spinner ng-show="isDisabled"></circle-spinner>
+<div ng-show="!isDisabled">
+	<div class="pure-g pure-form pure-form-stacked">
+		<div class="pure-u-1-3">
+			<label>Purpose</label>
+			<input type="text" readonly ng-model="Obligation.Purpose" />
+		</div>
+		<div class="pure-u-1-3">
+			<label>Date</label>
+			<input type="text" readonly ng-model="Obligation.Date" />
+		</div>
+		<div class="pure-u-1-3"></div>
+
+		<div class="pure-u-1-3">
+			<label>Obligation Number</label>
+			<input type="text" readonly ng-model="Obligation.ObligationNumber" />
+		</div>
+		<div class="pure-u-1-3">
+			<label>Operating Allowance</label>
+			<input type="text" readonly ng-model="Obligation.OperatingAllowance" />
+		</div>
+		<div class="pure-u-1-3"></div>
+		
+		<div class="pure-u-1-3">
+			<label>Allotment</label>
+			<input type="text" readonly ng-model="Obligation.Allotment" />
+		</div>
+		<div class="pure-u-1-3">
+			<label>Appropriation</label>
+			<input type="text" readonly ng-model="Obligation.Appropriation" />
+		</div>
+		<div class="pure-u-1-3"></div>
+
+		<div class="pure-u-1-3">
+			<label>Amount</label>
+			<input type="text" ng-input-currency readonly ng-model="Obligation.Amount" />
+		</div>
+		<div class="pure-u-1-3">
+			<label>Liquidated Amount</label>
+			<input type="text" ng-input-currency readonly ng-model="LiquidatedAmount" />
+		</div>
+		<div class="pure-u-1-3"></div>
+	</div>
+	<div class="pure-g pure-form pure-form-stacked" ng-show="Obligation.OperatingAllowance == '100710' && !Obligation.RewardsPublicity">
+		<div class="pure-u-1-3">
+			<label>Restricted Funds Returned</label>
+			<input type="text" ng-input-currency ng-model="Deobligation.RestrictedFunds" />
+		</div>
+		<div class="pure-u-2-3"></div>
+	</div>
+	<div class="pure-g pure-form pure-form-stacked">		
+		<div class="pure-u-1-3"  id="newAmountDiv" style="padding-top:10px;">
+			<label>New Amount</label>
+			<input type="text" ng-input-currency ng-model="Deobligation.NewAmount" id="NewAmount" ng-blur="ChangeToCurrencyFormat()"/>
+		</div>
+		<div class="pure-u-1">
+			<a class="pure-button pure-button-primary" id="Submit"  ng-click="Submit()" ng-disabled="isDisabled" >Save</a>&nbsp
+			<a class="pure-button button-plain" id="Cancel"  ui-sref="YearEndReconciliation" ng-disabled="isDisabled" >Cancel</a>
+		</div>
+	</div>
+</div>

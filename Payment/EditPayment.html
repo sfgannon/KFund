@@ -1,0 +1,296 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Edit Payment</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="selPaymentType">Payment Type</label>
+            <select id="selPaymentType" ng-model="Payment.PaymentType" ng-change="changePaymentType()" >
+                <option ng-repeat="t in PaymentTypes track by $index">{{t}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpDate">Date</label>
+            <input type="date" id="inpDate" ng-model="Payment.Date"  data-format="MM/dd/yyyy"  ng-readonly="Payment.PaymentType == ''"  />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAmount">Amount</label>
+            <input type="text" ng-input-currency id="inpAmount" ng-model="Payment.Amount" ng-readonly="Payment.PaymentType == ''" />
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="selAppropriation">Appropriation</label>
+            <select id="selAppropriation" ng-model="Payment.Appropriation" ng-disabled="Payment.PaymentType == ''" >
+                <option ng-repeat="a in Appropriations track by $index">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAllotment">Allotment</label>
+            <select id="selAllotment" ng-model="Payment.Allotment" ng-change="changeAppropriation()" ng-disabled="Payment.PaymentType == ''">
+                <option ng-repeat="a in Allotments track by $index">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3" ng-show="Payment.Allotment == '1007' && Payment.PaymentType != ''">
+            <label for="selOperatingAllowance">Operating Allowance</label>
+            <select ng-model="Payment.OperatingAllowance" id="selOperatingAllowance" ng-change="changeOperatingAllowance()" >
+                <option ng-repeat="o in OperatingAllowances track by $index" ng-if="o != '2003'">{{o}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.OperatingAllowance == '100710'">
+        <div class="pure-u-1-2">
+            <label for="selProgram">Rewards Program</label>
+            <select id="selRewards" ng-model="Payment.RewardsProgram" ng-change="filterRPPs()">
+                <option ng-repeat="rp in RewardsPrograms track by $index">{{rp}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-2">
+            <label for="selRPPs">RPPs</label>
+            <select id="selRPPs" ng-model="Payment.RPPs" multiple>
+                <option ng-repeat="r in FilteredRPPs track by $index">{{r.RPP}}</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="selPurpose">Purpose</label>
+            <input type="text" id="inpPurpose" ng-model="Payment.Purpose" ng-readonly="Payment.PaymentType == ''" style="width:60%;" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.PaymentType == 'Check'">
+        <div class="pure-u-1">
+            <label for="inpCheckNumber">Check Number</label>
+            <input type="text" ng-model="Payment.CheckNumber"  id="inpCheckNumber" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.PaymentType == 'EFT' || Payment.PaymentType == 'Check'">
+        <div class="pure-u-1-2">
+            <label for="selPayee">Payee</label>
+            <select id="selPayee" ng-model="Payment.Payee">
+                <option ng-repeat="p in Payees track by $index">{{p}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-2" ng-show="Payment.Payee == 'Other'">
+            <label>Other</label>
+            <input type="text" id="inpOther" ng-model="PayeeOther" />
+        </div>
+        <div class="pure-u-1">
+            <label for="taNotes">Notes</label>
+            <textarea id="taNotes" ng-model="Payment.Notes" rows="6" cols="60"  />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.PaymentType =='SPS Transfer'">
+        <div class="pure-u-1-3">
+            <label for="inpRequestNumber">Request Number</label>
+            <input type="text" id="inpRequestNumber" ng-model="Payment.RequestNumber"  />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAccount">Account</label>
+            <select id="selAccount" ng-model="Payment.Account">
+                <option ng-repeat="ac in Accounts track by $index">{{ac}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div id="AllotmentInfo"  ng-show="Payment.PaymentType =='EFT' || Payment.PaymentType == 'Check' || Payment.PaymentType == 'SPS Transfer'">
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <h4>Bureau Allotment Info</h4>
+            </div>
+        </div>
+        <div class="pure-g padding-row">
+            <div class="pure-u-1-3">
+                <label for="inpBureauAllotment">Representation Payment</label>
+                <input type="checkbox" id="inpBureauAllotment" ng-model="Payment.BureauAllotment" ng-change="bureauAllotmentChange();" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="selAllotmentType">Representation Type</label>
+                <select id="selAllotmentType" ng-model="Payment.RepresentationType" ng-disabled="!Payment.BureauAllotment" ng-change="RepresentationTypeChange();" >
+                    <option ng-repeat="rt in RepresentationTypes track by $index">{{rt}}</option>
+                </select>
+            </div>
+             <div class="pure-u-1-3"> </div>
+             
+            <div class="pure-u-1-3">
+                <label for="selAllotmentType">Allotment Type</label>
+                <select id="selAllotmentType" ng-model="Payment.AllotmentType" ng-disabled="!Payment.BureauAllotment">
+                    <option ng-repeat="at in AllotmentTypes track by $index">{{at}}</option>
+                </select>
+            </div>
+           
+
+            <div class="pure-u-1-3" ng-if="Payment.RepresentationType != 'Adhoc Bureau Payment'">
+                <label for="selBureau">Bureau</label>
+                <select id="selBureau" ng-model="Payment.Bureau" ng-disabled="!Payment.BureauAllotment || Payment.RepresentationType == 'Functions Paid by MEDCS'">
+                    <option ng-repeat="b in Bureaus track by $index">{{b}}</option>
+                </select>
+            </div>
+            <div class="pure-u-1-3" ng-if="Payment.RepresentationType == 'Adhoc Bureau Payment'">
+                <label for="selBureau">Bureau</label>
+                <select id="selBureau" ng-model="Payment.Bureau" ng-disabled="!Payment.BureauAllotment || Payment.RepresentationType == 'Functions Paid by MEDCS'">
+                    <option ng-repeat="b in AdhocBureaus track by $index">{{b}}</option>
+                </select>
+            </div>
+            <div class="pure-u-1"> </div>
+	        
+            <div class="pure-u-1">
+                <h4>Gift Fund Info</h4>
+            </div>
+	       
+            <div class="pure-u-1"> </div>
+            <div class="pure-u-1-3">
+                <label for="inpGiftFundsUsed">Gift Funds Used</label>
+                <input type="checkbox" id="inpGiftFundsUsed" ng-model="Payment.GiftFundsUsed"  ng-change="giftFundsChange()" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="inpGiftFundAmount">Gift Fund Amount</label>
+                <input type="text"  ng-input-currency  id="inpGiftFundAmount" ng-model="Payment.GiftFundAmount" ng-readonly="!Payment.GiftFundsUsed" />
+            </div>
+            <div class="pure-u-1-3"></div>
+        </div>
+    </div>
+</div>
+<div class="pure-form">
+    <div id="FundCiteObligation" ng-show="Payment.PaymentType == 'Fund Cite'">
+        <div class="pure-g">
+            <div class="pure-u-1">
+                <h4>Search Obligations</h4>
+            </div>
+        </div>
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <input type="text" id="inpSearch" ng-model="fcSearchText" placeholder="Search for Obligation" />&nbsp
+                <a class="pure-button pure-button-primary" ng-click="fcFindObligations()" id="btnSearch">Search</a>
+            </div>
+        </div>
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <table id="SearchedObligations" class="pure-table pure-table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Number</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr ng-show="fcSearchResults.length == 0">
+                    		<td colspan="3">
+                    			No Search Results
+                    		</td>
+                    	</tr>
+                        <tr ng-repeat="s in fcSearchResults track by $index">
+                            <td><a id="LinkObligations" ng-click="fcLinkObligation($index)" class="pure-button button-plain">Link</a></td>
+                            <td>{{s.ObligationNumber}}</td>
+                            <td>{{s.Purpose}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="pure-g">
+            <div class="pure-u-1">
+                <h4>Linked Obligation</h4>
+            </div>
+        </div>
+        <div class="pure-g padding-row pure-form-stacked">
+            <div class="pure-u-1-3">
+                <label for="inpLinkedObligationNumber">Number</label>
+                <input type="text" ng-model="Payment.Obligations[0].ObligationNumber" ng-readonly="true" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="inpLinkedObligationPurpose">Purpose</label>
+                <input type="text" ng-model="Payment.Obligations[0].Purpose" ng-readonly="true" />
+            </div>
+        </div>
+        <div class="pure-g">
+            <div class="pure-u-1-3">
+                <a class="pure-button button-plain" id="RemoveLinkedObligations" ng-click="fcRemoveObligation()" >Remove</a>
+            </div>
+        </div>
+        <div class="pure-g padding-row pure-form-stacked">
+            <div class="pure-u-1">
+                <label for="inpFundCiteNumber">Fund Cite Number</label>
+                <input type="text" id="inpFundCiteNumber" ng-model="Payment.FundCiteNumber" ng-readonly="true" style="width:50%"; />
+            </div>
+        </div>
+    </div>
+    <div id="SPSTransferObligation" ng-show="Payment.PaymentType == 'SPS Transfer'">
+        <div class="pure-g">
+            <div class="pure-u-1">
+                <h4>Search Obligations</h4>
+            </div>
+        </div>
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <input type="text" id="inpSearch" ng-model="spsSearchText" placeholder="Search for Obligations" />&nbsp
+                <a class="pure-button pure-button-primary" ng-click="spsFindObligations()" id="btnSearch">Search</a>
+            </div>
+        </div>
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <table id="SearchObligations" class="pure-table pure-table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Number</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr ng-show="spsSearchResults.length == 0">
+                    		<td colspan="3">No Search Results</td>
+                    	</tr>
+
+                        <tr ng-repeat="s in spsSearchResults track by $index">
+                            <td><a ng-click="spsLinkObligation($index)" class="pure-button button-plain">Link</a></td>
+                            <td>{{s.ObligationNumber}}</td>
+                            <td>{{s.Purpose}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>   
+        <div class="pure-g">
+            <div class="pure-u-1">
+                <h4>Linked Obligations</h4>
+            </div>
+        </div>                     
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <table id="LinkedObligations" class="pure-table pure-table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Number</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<tr ng-show="Payment.Obligations.length == 0">
+                    		<td colspan="3">No Obligations Linked</td>
+                    	</tr>
+                        <tr ng-repeat="o in Payment.Obligations track by $index">
+                            <td><a ng-click="spsRemoveObligation($index)" class="pure-button button-plain">Remove</a></td>
+                            <td>{{o.ObligationNumber}}</td>
+                            <td><input  ng-input-currency  type="text" ng-model="o.Amount" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1">
+        <a id="btnSave" class="pure-button pure-button-primary" ng-click="savePayment()" ng-disabled="isDisabled">Save</a>&nbsp
+        <a id="btnCancel" class="pure-button button-plain" ng-click="cancel()" ng-disabled="isDisabled">Cancel</a>
+    </div>
+</div>

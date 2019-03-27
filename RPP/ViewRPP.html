@@ -1,0 +1,57 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <a class="pure-button button-secondary" ui-sref="home" id="btnHome">Home</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h3>View RPP <a style="font-size:11pt" class="pure-button button-error" ui-sref="Delete({ id: RPP.Id })" >Delete Obligation </a></h3>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-2">
+            <label>RPP</label>
+            <input type="text" id="inpRPP" ng-model="RPP.RPP" ng-readonly="true" />
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-3">
+            <label>Date</label>
+            <input type="date" id="inpDate" ng-readonly="true" ng-model="RPP.Date" />
+        </div>
+        <div class="pure-u-1-2">
+            <label>Rewards Program</label>
+            <input type="text" id="inpRewardsProgram" ng-model="RPP.RewardsProgram" ng-readonly="true" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Payments</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table id="paymentsTable" class="pure-table pure-table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Payment Type</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<tr ng-show="Payments.length == 0">
+                		<td colspan="3">No Payments Associated</td>
+                	</tr>
+                    <tr ng-repeat="p in Payments track by $index">
+                        <td><a ui-sref="ViewPayment({ id: p.Id })" class="pure-button button-secondary" id="btnView{{$index}}">View</a>
+                        </td>
+                        <td>{{p.PaymentType}}</td>
+                        <td>{{p.Amount | currency }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>            

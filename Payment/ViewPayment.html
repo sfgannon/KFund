@@ -1,0 +1,244 @@
+﻿<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="homeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h3>Payment</h3>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" id="editPaymentBtn" ui-sref="EditPayment({ id: Payment.Id })">Edit Payment Info</a>
+            <a class="pure-button button-error" ui-sref="Delete({ id: Payment.Id })" >Delete Payment </a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="inpPaymentType">Payment Type</label>
+             <input id="inpPaymentType" ng-model="Payment.PaymentType" ng-readonly="true" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpDate">Date</label>
+            <input type="date" id="inpDate" ng-model="Payment.Date" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAmount">Amount</label>
+            <input type="text"  ng-input-currency  id="inpAmount" ng-model="Payment.Amount" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="selAppropriation">Appropriation</label>
+            <input id="selAppropriation" ng-model="Payment.Appropriation" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAllotment">Allotment</label>
+            <input id="inpAllotment" ng-model="Payment.Allotment"  ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3" ng-show="Payment.Allotment == '1007'">
+            <label for="selOperatingAllowance">Operating Allowance</label>
+            <input id="selOperatingAllowance" ng-model="Payment.OperatingAllowance"  ng-readonly="true" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.OperatingAllowance == '100710'">
+        <div class="pure-u-1-3">
+            <label for="selProgram">Rewards Program</label>
+            <input id="selRewards" ng-model="Payment.RewardsProgram" ng-change="changeProgram()" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3">
+            <label>RPPs</label>
+            <div ng-repeat="r in RPPs track by $index" style="padding:2px;display:inline;">
+                <a ui-sref="ViewRPP({ id: r.Id })" class="pure-button button-plain" id="btnViewRPP{{r.Id}}">{{r.RPP}}</a>
+            </div>
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="inpPurpose">Purpose</label>
+            <input type="text" id="inpPurpose" ng-model="Payment.Purpose" ng-readonly="true" style="width:60%;" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.PaymentType == 'Check'">
+        <div class="pure-u-1">
+            <label for="inpCheckNumber">Check Number</label>
+            <input type="text" ng-model="Payment.CheckNumber"  id="inpCheckNumber" ng-readonly="true"  />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.PaymentType == 'EFT' || Payment.PaymentType == 'Check'">
+        <div class="pure-u-1-2">
+            <label for="selPayee">Payee</label>
+            <input id="selPayee" ng-model="Payment.Payee"  ng-readonly="true" />
+        </div>
+        <div class="pure-u-1">
+            <label for="taNotes">Notes</label>
+            <textarea id="taNotes" ng-model="Payment.Notes" rows="6" cols="60"  ng-readonly="true" />
+        </div>
+    </div>
+    <div class="pure-g padding-row" ng-show="Payment.PaymentType =='SPS Transfer'">
+        <div class="pure-u-1-3">
+            <label for="inpRequestNumber">Request Number</label>
+            <input type="text" id="inpRequestNumber" ng-model="Payment.RequestNumber" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAccount">Account</label>
+            <input id="inpAccount" ng-model="Payment.Account"  ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div id="AllotmentInfo"  ng-show="(Payment.PaymentType =='EFT' || Payment.PaymentType == 'Check' || Payment.PaymentType == 'SPS Transfer') && Payment.BureauAllotment">
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <h4>Bureau Allotment Info</h4>
+            </div>
+        </div>
+        <div class="pure-g padding-row">
+            <div class="pure-u-1-3">
+                <label for="inpBureauAllotment">Representation Payment</label>
+                <input type="checkbox" id="inpBureauAllotment" ng-model="Payment.BureauAllotment" ng-disabled="true" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="selAllotmentType">Allotment Type</label>
+                <input id="selAllotmentType" ng-model="Payment.AllotmentType"  ng-readonly="true" />
+            </div>
+            <div class="pure-u-1"> </div>
+            <div class="pure-u-1-3">
+                <label for="selAllotmentType">Representation Type</label>
+                <input id="selAllotmentType" ng-model="Payment.RepresentationType"  ng-readonly="true" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="selBureau">Bureau</label>
+                <input id="selBureau" ng-model="Payment.Bureau"  ng-readonly="true" />
+            </div>
+            <div class="pure-u-1"> </div>
+            <div class="pure-u-1">
+                <h4>Gift Fund Info</h4>
+            </div>
+
+            <div class="pure-u-1-3">
+                <label for="inpGiftFundsUsed">Gift Funds Used</label>
+                <input type="checkbox" id="inpGiftFundsUsed" ng-model="Payment.GiftFundsUsed" ng-disabled="true" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="inpGiftFundAmount">Gift Fund Amount</label>
+                <input type="text"  ng-input-currency  id="inpGiftFundAmount" ng-model="Payment.GiftFundAmount" ng-readonly="true" />
+            </div>
+            <div class="pure-u-1-3"></div>
+        </div>
+    </div>
+</div>
+<div class="pure-form">
+    <div id="FundCiteObligation" ng-show="Payment.PaymentType == 'Fund Cite'">
+        <div class="pure-g padding-row pure-form-stacked">
+            <div class="pure-u-1">
+                <label for="inpFundCiteNumber">Fund Cite Number</label>
+                <input type="text" id="inpFundCiteNumber" ng-model="Payment.FundCiteNumber" ng-readonly="true"  style="width:50%"; />
+            </div>
+        </div>
+        <div class="pure-g">
+            <div class="pure-u-1">
+                <h4>Linked Obligation</h4>
+            </div>
+        </div>
+        <div class="pure-g padding-row pure-form-stacked">
+            <div class="pure-u-1-3">
+                <label for="inpLinkedObligationNumber">Number</label>
+                <input type="text" ng-model="Payment.Obligations[0].ObligationNumber" ng-readonly="true" />
+            </div>
+            <div class="pure-u-1-3">
+                <label for="inpLinkedObligationPurpose">Purpose</label>
+                <input type="text" ng-model="Payment.Obligations[0].Purpose" ng-readonly="true" />
+            </div>
+        </div>
+    </div>
+    <div id="SPSTransferObligation" ng-show="Payment.PaymentType == 'SPS Transfer'">   
+        <div class="pure-g">
+            <div class="pure-u-1">
+                <h4>Linked Obligations</h4>
+            </div>
+        </div>                     
+        <div class="pure-g padding-row">
+            <div class="pure-u-1">
+                <table id="LinkedObligations" class="pure-table pure-table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-show="Obligations.length == 0">
+                            <td colspan="2" style="text-align:center;">No Linked Obligations</td>
+                        </tr>
+                        <tr ng-repeat="o in Payment.Obligations track by $index">
+                            <td>{{o.ObligationNumber}}</td>
+                            <td>{{o.Amount | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1">
+        <h4>Attachments</h4>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1" ng-show="Payment.Id"> 
+        <input type="file" id="inpFile" file-model="myFile" file-value="fileData" style="cursor:pointer;display:inline-block;" />&nbsp<a class="pure-button button-plain" id="attachFileBtn" style="cursor:pointer;display:inline-block;" ng-click="uploadFile()" style="cursor:pointer" ng-disabled="attaching" >Attach File</a><br>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1">
+        <table class="pure-table pure-table-bordered" id="attachmentsTable">
+            <thead><tr><th></th><th>Filename</th></tr></thead>
+            <tbody>
+                <tr ng-show="Attachments.length == 0">
+                    <td colspan="2" style="text-align:center;">No Attachments</td>
+                </tr>
+                <tr ng-repeat="e in Attachments track by $index">
+                    <td><a ng-click="removeAttachment(e.FileName)" style="cursor:pointer">Delete Attachment</a></td>
+                    <td><a target="_blank" href="{{e.ServerRelativeUrl}}">{{e.FileName}}</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1">
+        <h4>Payment Return(s)</h4>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1">
+        <table id="PaymentReturns" class="pure-table pure-table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Date</th>
+                    <th>Operating Allowance/Post Code</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-show="PaymentReturns.length == 0">
+                    <td colspan="4" style="text-align:center;">No Linked Payment Returns</td>
+                </tr>
+                <tr ng-repeat="pr in PaymentReturns">
+                    <td><a id="View" class="pure-button button-secondary" ui-sref="ViewPaymentReturn({ id: pr.Id })">View</a></td>
+                    <td>{{ pr.Date | date:'MM/dd/yyyy' }}</td>
+                    <td>{{ (!pr.OperatingAllowance)?(pr.PostCode):(pr.OperatingAllowance)}}</td>
+                    <td>{{pr.Purpose}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

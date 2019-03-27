@@ -1,0 +1,79 @@
+﻿<div class="pure-form">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Manage Payment Return Sources</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" ng-click="cancel()">Back to View Payment Return</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-ordered" id="PaymentsTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Payment Type</th>
+                        <th>Operating Allowance</th>
+                        <th>Purpose</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-show="PaymentReturnSources.length == 0">
+                        <td colspan="5">No Payment Return Sources</td>
+                    </tr>
+
+                    <tr ng-repeat="r in PaymentReturnSources track by $index">
+                        <td><a class="pure-button button-error" ng-click="removePaymentReturnSource($index)">Remove</a></td>
+                        <td>{{r.PaymentType}}</td>
+                        <td>{{r.OperatingAllowance}}</td>
+                        <td>{{r.Purpose}}</td>
+                        <td>{{r.Amount | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Find Payments</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="inpSearch">Search Text: </label><input type="text" ng-model="SearchText" id="inpSearch" style="width:30%;" />
+            <a class="pure-button button-plain" ng-click="Search()">Search</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-ordered" id="SearchTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Payment Type</th>
+                        <th>Operating Allowance</th>
+                        <th>Purpose</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-show="SearchResults.length == 0">
+                        <td colspan="5">No Search Results</td>
+                    </tr>
+
+                    <tr ng-repeat="r in SearchResults track by $index">
+                        <td><a class="pure-button button-plain" ng-click="LinkPaymentReturnSource($index)">Link</a></td>
+                        <td>{{r.PaymentType}}</td>
+                        <td>{{r.OperatingAllowance}}</td>
+                        <td>{{r.Purpose}}</td>
+                        <td>{{r.Amount | currency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

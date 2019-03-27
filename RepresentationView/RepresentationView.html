@@ -1,0 +1,278 @@
+﻿
+<div class="pure-g pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="homeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+
+
+<h4>BUREAU REPRESENTATION FUNDS</h4>
+<div class="pure-g pure-form">	
+	<div class="pure-u-1" style="padding-bottom:10px">		
+		<div class="pure-u-1-3 pure-g" id="fiscalYearDiv" style="padding-top:10px;">			
+			<div class="pure-u-1-4">
+				<label>Fiscal Year:</label>
+			</div>
+			<div class="pure-u-1-4">
+				<select  ng-model="Representation.FiscalYear" id="FiscalYear" ng-change="ChangeFiscalYear(Representation.FiscalYear)">				
+					<option ng-repeat="FY in ListOfFiscalYears">{{FY}}</option>				
+				</select>
+			</div>		
+		</div>		
+	</div>
+</div>
+
+<ul class="tab" >
+	<li ng-repeat="rp in RepresentationTypes" ><a href="javascript:void(0)"  class="tablinks" ng-click="openTab(event , rp)" >{{rp}}</a></li>
+</ul>
+
+
+<div ng-repeat="rp in RepresentationTypes"  id={{rp}} class="tabcontent padding-row">
+
+	<div ng-repeat="object in TableObjects" ng-show="object.RepresentationType == rp" ng-if="object.RepresentationType != 'Functions Paid by MEDCS' && object.RepresentationType != 'Other'">
+	
+		<div class="pure-u-2-3" id="TableDiv">
+			<table id="Table" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+				<caption>CHECKS/EFTs ISSUED as of {{TodaysDate}}</caption>
+				<thead>
+					<tr>
+						<th>Bureau</th>
+						<th>Purpose</th>
+						<th>Qtr 1</th>
+						<th>Qtr 2</th>
+						<th>Qtr 3</th>
+						<th>Qtr 4</th>
+						<th>Total</th>
+						<th>CheckNumber</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="row in object.rows">
+						<td>{{row.Bureau}}</td>
+						<td>{{row.Purpose}}</td>
+						<td>{{row.First | currency | negativeParenthesis}}</td>
+						<td>{{row.Second | currency | negativeParenthesis}}</td>
+						<td>{{row.Third | currency | negativeParenthesis}}</td>
+						<td>{{row.Fourth | currency | negativeParenthesis}}</td>
+						<td>{{row.BureauTotal | currency | negativeParenthesis}}</td>
+						<td>{{row.Checks}}</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr style="border-top: 1px solid">
+						<th>Total Representation - Allot to Bureaus</th>
+						<th></th>
+						<th>{{object.Qtr1Total | currency | negativeParenthesis}}</th>
+						<th>{{object.Qtr2Total | currency | negativeParenthesis}}</th>
+						<th>{{object.Qtr3Total | currency | negativeParenthesis}}</th>
+						<th>{{object.Qtr4Total | currency | negativeParenthesis}}</th>
+						<th>{{object.FiscalTotal | currency | negativeParenthesis}}</th>
+						<th></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+			
+	</div>
+	<div ng-repeat="object in TableObjects" ng-show="object.RepresentationType == rp" ng-if="object.RepresentationType == 'Functions Paid by MEDCS'|| object.RepresentationType == 'Other'">
+	
+		<div class="pure-u-2-3" id="TableDiv">
+			<table id="Table" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+				<caption>CHECKS/EFTs ISSUED as of {{TodaysDate}}</caption>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Check Number</th>
+						<th>Amount</th>
+						<th>Payee</th>
+						<th>Invoice</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody style="border-top:thin black solid" ng-if="object.Qtr1Object.Payments.length > 0">
+					<tr>
+						<td colspan="5"></td>
+						<td> <strong> Qtr 1 </strong></td>
+					</tr>
+					<tr ng-repeat="row in object.Qtr1Object.Payments">
+						<td>{{row.Date}}</td>
+						<td>{{row.CheckNumber}}</td>
+						<td>{{row.Amount | currency | negativeParenthesis}}</td>
+						<td>{{row.Payee}}</td>
+						<td>{{row.Purpose}}</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="4"></td>
+						<td style="float:right;"> <strong>Total:</strong> </td>
+						<td> <strong>{{object.Qtr1Object.Total | currency | negativeParenthesis}}</strong> </td>
+					</tr>					
+				</tbody>
+				
+				<tbody style="border-top:thin black solid" ng-if="object.Qtr2Object.Payments.length > 0">
+					<tr>
+						<td colspan="5"></td>
+						<td><strong>Qtr 2</strong> </td>
+					</tr>
+					<tr ng-repeat="row in object.Qtr2Object.Payments">
+						<td>{{row.Date}}</td>
+						<td>{{row.CheckNumber}}</td>
+						<td>{{row.Amount | currency | negativeParenthesis}}</td>
+						<td>{{row.Payee}}</td>
+						<td>{{row.Purpose}}</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="4"></td>
+						<td style="float:right;"> <strong>Total:</strong> </td>
+						<td> <strong>{{object.Qtr2Object.Total | currency | negativeParenthesis}} </strong> </td>
+					</tr>					
+				</tbody>
+				<tbody style="border-top:thin black solid" ng-if="object.Qtr3Object.Payments.length > 0">
+					<tr>
+						<td colspan="5"></td>
+						<td><strong> Qtr 3 </strong></td>
+					</tr>
+					<tr ng-repeat="row in object.Qtr3Object.Payments">
+						<td>{{row.Date}}</td>
+						<td>{{row.CheckNumber}}</td>
+						<td>{{row.Amount | currency | negativeParenthesis}}</td>
+						<td>{{row.Payee}}</td>
+						<td>{{row.Purpose}}</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="4"></td>
+						<td style="float:right;"> <strong>Total:</strong> </td>
+						<td> <strong>{{object.Qtr3Object.Total | currency | negativeParenthesis}}</strong> </td>
+					</tr>					
+				</tbody>
+				<tbody style="border-top:thin black solid" ng-if="object.Qtr4Object.Payments.length > 0">
+					<tr>
+						<td colspan="5"></td>
+						<td><strong> Qtr 4</strong> </td>
+					</tr>
+					<tr ng-repeat="row in object.Qtr4Object.Payments">
+						<td>{{row.Date}}</td>
+						<td>{{row.CheckNumber}}</td>
+						<td>{{row.Amount | currency | negativeParenthesis}}</td>
+						<td>{{row.Payee}}</td>
+						<td>{{row.Purpose}}</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="4"></td>
+						<td style="float:right;"> <strong>Total:</strong> </td>
+						<td> <strong>{{object.Qtr4Object.Total | currency | negativeParenthesis}}</strong> </td>
+					</tr>					
+				</tbody>
+				<tfoot>
+					<tr style="border-top: 1px solid">
+						
+						<th></th>
+						<th></th>
+						<th>{{object.FiscalTotal | currency | negativeParenthesis}}</th>						
+						<th>Total FY 20{{Representation.FiscalYear}}</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</tfoot>
+				
+				
+			</table>
+		</div>
+			
+	</div>
+	
+</div>
+
+<!--
+<div>
+	<div class="pure-u-2-3" id="TableDiv">
+		<table id="Table" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+			<caption>CHECKS/EFTs ISSUED as of {{TodaysDate}}</caption>
+			<thead>
+				<tr>
+					<th>Bureau</th>
+					<th>Purpose</th>
+					<th>Qtr 1</th>
+					<th>Qtr 2</th>
+					<th>Qtr 3</th>
+					<th>Qtr 4</th>
+					<th>Total</th>
+					<th>CheckNumber</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in rows">
+					<td>{{row.Bureau}}</td>
+					<td>{{row.Purpose}}</td>
+					<td>{{row.First | currency | negativeParenthesis}}</td>
+					<td>{{row.Second | currency | negativeParenthesis}}</td>
+					<td>{{row.Third | currency | negativeParenthesis}}</td>
+					<td>{{row.Fourth | currency | negativeParenthesis}}</td>
+					<td>{{row.BureauTotal | currency | negativeParenthesis}}</td>
+					<td>{{row.Checks}}</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr style="border-top: 1px solid">
+					<th>Total Representation - Allot to Bureaus</th>
+					<th></th>
+					<th>{{Qtr1Total | currency | negativeParenthesis}}</th>
+					<th>{{Qtr2Total | currency | negativeParenthesis}}</th>
+					<th>{{Qtr3Total | currency | negativeParenthesis}}</th>
+					<th>{{Qtr4Total | currency | negativeParenthesis}}</th>
+					<th>{{FiscalTotal | currency | negativeParenthesis}}</th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>	
+</div>
+
+-->
+
+
+<style>
+
+	/* Style the list */
+	ul.tab {
+	    list-style-type: none;
+	    margin: 0;
+	    padding: 0;
+	    overflow: hidden;
+	    border: 1px solid #ccc;
+	    background-color: #f1f1f1;
+	}
+	
+	/* Float the list items side by side */
+	ul.tab li {float: left;}
+	
+	/* Style the links inside the list items */
+	ul.tab li a {
+	    display: inline-block;
+	    color: black;
+	    text-align: center;
+	    padding: 14px 16px;
+	    text-decoration: none;
+	    transition: 0.3s;
+	    font-size: 17px;
+	}
+	
+	/* Change background color of links on hover */
+	ul.tab li a:hover {background-color: #ddd;}
+	
+	/* Create an active/current tablink class */
+	ul.tab li a:focus, .active {background-color: #ccc;}
+	
+	/* Style the tab content */
+	.tabcontent {
+	    display: none;
+	    padding: 6px 12px;
+	    border: 1px solid #ccc;
+	    border-top: none;
+	}
+
+</style>
+

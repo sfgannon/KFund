@@ -1,0 +1,224 @@
+﻿<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="HomeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+
+	<div class="pure-u-1" style="padding-bottom:10px">		
+		<div class="pure-u-1-3 pure-g pure-form" id="fiscalYearDiv" style="padding-top:10px;">			
+			<div class="pure-u-1-4">
+				<label>Fiscal Year:</label>
+			</div>
+			<div class="pure-u-1-4">
+				<select  ng-model="SummaryFinPlan.FiscalYear" id="FiscalYear" ng-change="ChangeFiscalYear(SummaryFinPlan.FiscalYear)">				
+					<option ng-repeat="FY in ListOfFiscalYears">{{FY}}</option>				
+				</select>
+			</div>		
+		</div>		
+	</div>
+
+
+<div class="pure-form pure-form-stacked">
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <h4>EMERGENCIES IN THE DIPLOMATIC AND CONSULAR SERVICES</h4>
+            <h5>As of {{DisplayDate}}</h5>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-bordered" id="tblSFP">
+                <thead>
+                    <tr>
+                        <td colspan=2></td>
+                        <td colspan=2>19___X05220002</td>
+                        <td colspan=2>19___X05220003</td>
+                    </tr>
+                    <tr>
+                        <td><strong>$ in Thousands</strong></td>
+                        <td></td>
+                        <td colspan=1>Allot 2003</td>
+                        <td colspan=3>Allot 1007</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Total</strong></td>
+                        <td colspan=2>Unforeseen Emergencies</td>
+                        <td colspan=2>Rewards</td>
+                    </tr>
+                    <tr>
+                        <td colspan=2></td>
+                        <td><i>Evacuations</i></td>
+                        <td><i>Other</i></td>
+                        <td><i>Restricted</i></td>
+                        <td><i>Unrestricted</i></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Source of Funds:</strong></td>
+                        <td colspan=5></td>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr ng-repeat="s in SOFs.SOFs track by $index">
+                        <td>{{s.Title}}</td>
+                        <td>{{(s.Total == 0.00)?('-'):(s.Total)|  negativeParenthesisInteger}}</td>                        
+                        <td>{{(s.Evacuations == 0.00)?('-'):(s.Evacuations )|  negativeParenthesisInteger}}</td>                        
+                        <td>{{(s.Other == 0.00)?('-'):(s.Other )|  negativeParenthesisInteger}}</td>                        
+                        <td>{{(s.RestrictedFunds == 0.00)?('-'):(s.RestrictedFunds )|  negativeParenthesisInteger}}</td>                        
+                        <td>{{(s.UnrestrictedFunds == 0.00)?('-'):(s.UnrestrictedFunds )|  negativeParenthesisInteger}}</td>
+                    </tr>
+                    <tr style="border-top:2px black solid;">
+                        <td><strong>{{SOFs.Total.Title}}</strong></td>
+                        <td><strong>{{(SOFs.Total.Total == 0.00)?('-'):(SOFs.Total.Total)|  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(SOFs.Total.Evacuations == 0.00)?('-'):(SOFs.Total.Evacuations)|  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(SOFs.Total.Other == 0.00)?('-'):(SOFs.Total.Other)|  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(SOFs.Total.RestrictedFunds == 0.00)?('-'):(SOFs.Total.RestrictedFunds )|  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(SOFs.Total.UnrestrictedFunds == 0.00)?('-'):(SOFs.Total.UnrestrictedFunds)|  negativeParenthesisInteger}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6><strong>FY 20{{SummaryFinPlan.FiscalYear}} Obligations To Date:</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6><strong>Unforeseen Emergencies</strong></td>
+                    </tr>
+                    <tr>
+                        <td>{{Obligations.EvacuationTotalRow.Title}}</td>
+                        <td>{{(Obligations.EvacuationTotalRow.Total == 0.00)?('-'):(Obligations.EvacuationTotalRow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr ng-repeat="o in Obligations.EvacRows">
+                        <td>{{o.Title}}</td>
+                        <td>-</td>
+                        <td>{{(o.EvacuationAmount == 0.00)?('-'):(o.EvacuationAmount) |  negativeParenthesisInteger}}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>{{Obligations.OtherRow.Title}}</td>
+                        <td>{{(Obligations.OtherRow.Total == 0.00)?('-'):(Obligations.OtherRow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>-</td>
+                        <td>{{(Obligations.OtherRow.Total == 0.00)?('-'):(Obligations.OtherRow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr style="border-top:2px black solid;">
+                        <td colspan=6><strong>Rewards Payments</strong></td>
+                    </tr>
+                    <tr ng-repeat="pay in Obligations.RewardPaymentRows">
+                        <td>{{pay.Title}}</td>
+                        <td>{{(pay.Total == 0.00)?('-'):(pay.Total) |  negativeParenthesisInteger}}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{(pay.RestrictedFunds == 0.00)?('-'):(pay.RestrictedFunds) |  negativeParenthesisInteger}}</td>
+                        <td>{{(pay.UnrestrictedFunds == 0.00)?('-'):(pay.UnrestrictedFunds) |  negativeParenthesisInteger}}</td>
+                    </tr>
+                    <tr style="border-top:2px black solid;">
+                        <td colspan=6><strong>Rewards Publicity</strong></td>
+                    </tr>
+                    <tr ng-repeat="pay in Obligations.RewardPublicityRows">
+                        <td>{{pay.Title}}</td>
+                        <td>{{(pay.Total == 0.00)?('-'):(pay.Total) |  negativeParenthesisInteger}}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{(pay.RestrictedFunds == 0.00)?('-'):(pay.RestrictedFunds) |  negativeParenthesisInteger}}</td>
+                        <td>{{(pay.UnrestrictedFunds == 0.00)?('-'):(pay.UnrestrictedFunds) |  negativeParenthesisInteger}}</td>
+                    </tr>
+                    <tr style="border-top:2px black solid;">
+                        <td><strong>{{Obligations.ObligationTotalRow.Title}}</strong></td>
+                        <td>{{(Obligations.ObligationTotalRow.Total == 0.00)?('-'):(Obligations.ObligationTotalRow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Obligations.ObligationTotalRow.Evacuations == 0.00)?('-'):(Obligations.ObligationTotalRow.Evacuations) |  negativeParenthesisInteger}}</td>                
+                        <td>{{(Obligations.ObligationTotalRow.Other == 0.00)?('-'):(Obligations.ObligationTotalRow.Other) |  negativeParenthesisInteger}}</td>                        
+                        <td>{{(Obligations.ObligationTotalRow.RestrictedFunds == 0.00)?('-'):(Obligations.ObligationTotalRow.RestrictedFunds) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Obligations.ObligationTotalRow.UnrestrictedFunds  == 0.00)?('-'):(Obligations.ObligationTotalRow.UnrestrictedFunds ) |  negativeParenthesisInteger}}</td>
+					</tr>
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>					
+                    <tr style="border-top:2px black solid;">
+                        <td><strong>EDCS Availability as of {{EdcsAvailabilityDisplayDate}}</strong></td>
+                        <td><strong>{{(Total.Total == 0.00)?('-'):(Total.Total) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Total.Evacuations == 0.00)?('-'):(Total.Evacuations ) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Total.Other == 0.00)?('-'):(Total.Other) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Total.RestrictedFunds == 0.00)?('-'):(Total.RestrictedFunds) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Total.UnrestrictedFunds  == 0.00)?('-'):(Total.UnrestrictedFunds ) |  negativeParenthesisInteger}}</strong></td>
+                    </tr>    
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6><strong>Total Prior Year Recoveries/Transfers not allotted during FY 20{{SummaryFinPlan.FiscalYear}} (to be incl in carryover)</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6><strong>Unforeseen Emergencies</strong></td>
+                    </tr>
+                    <tr>
+                        <td>{{Recoveries.UERow.Title}}</td>
+                        <td>{{(Recoveries.UERow.Total == 0.00)?('-'):(Recoveries.UERow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.UERow.Evacuations  == 0.00)?('-'):(Recoveries.UERow.Evacuations ) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.UERow.Other == 0.00)?('-'):(Recoveries.UERow.Other) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.UERow.RestrictedFunds == 0.00)?('-'):(Recoveries.UERow.RestrictedFunds) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.UERow.UnrestrictedFunds  == 0.00)?('-'):(Recoveries.UERow.UnrestrictedFunds ) |  negativeParenthesisInteger}}</td>
+    				</tr>
+
+                    <tr>
+                        <td colspan=6><strong>Rewards</strong></td>
+                    </tr>
+                     <tr>
+                        <td>{{Recoveries.RewardPaymentRow.Title}}</td>
+                        <td>{{(Recoveries.RewardPaymentRow.Total == 0.00)?('-'):(Recoveries.RewardPaymentRow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPaymentRow.Evacuations  == 0.00)?('-'):(Recoveries.RewardPaymentRow.Evacuations ) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPaymentRow.Other == 0.00)?('-'):(Recoveries.RewardPaymentRow.Other) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPaymentRow.RestrictedFunds == 0.00)?('-'):(Recoveries.RewardPaymentRow.RestrictedFunds) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPaymentRow.UnrestrictedFunds  == 0.00)?('-'):(Recoveries.RewardPaymentRow.UnrestrictedFunds ) |  negativeParenthesisInteger}}</td>
+    				</tr>
+                     <tr>
+                        <td>{{Recoveries.RewardPublicityRow.Title}}</td>
+                        <td>{{(Recoveries.RewardPublicityRow.Total == 0.00)?('-'):(Recoveries.RewardPublicityRow.Total) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPublicityRow.Evacuations  == 0.00)?('-'):(Recoveries.RewardPublicityRow.Evacuations ) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPublicityRow.Other == 0.00)?('-'):(Recoveries.RewardPublicityRow.Other) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPublicityRow.RestrictedFunds == 0.00)?('-'):(Recoveries.RewardPublicityRow.RestrictedFunds) |  negativeParenthesisInteger}}</td>
+                        <td>{{(Recoveries.RewardPublicityRow.UnrestrictedFunds  == 0.00)?('-'):(Recoveries.RewardPublicityRow.UnrestrictedFunds ) |  negativeParenthesisInteger}}</td>
+
+    				</tr>
+                    <tr style="border-top:2px black solid;">
+                    	<td><strong>{{Recoveries.Total.Title}}</strong></td>
+                        <td><strong>{{(Recoveries.Total.Total == 0.00)?('-'):(Recoveries.Total.Total) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Recoveries.Total.Evacuations == 0.00)?('-'):(Recoveries.Total.Evacuations ) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Recoveries.Total.Other == 0.00)?('-'):(Recoveries.Total.Other) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Recoveries.Total.RestrictedFunds == 0.00)?('-'):(Recoveries.Total.RestrictedFunds) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(Recoveries.Total.UnrestrictedFunds  == 0.00)?('-'):(Recoveries.Total.UnrestrictedFunds ) |  negativeParenthesisInteger}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>
+                    <tr>
+                        <td colspan=6></td>
+                    </tr>
+                    <tr>
+                        <td><strong>TOTAL EDCS PROJECTED EOY AVAILABLITY</strong></td>
+                        <td><strong>{{(GrandTotal.Total == 0.00)?('-'):(GrandTotal.Total) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(GrandTotal.Evacuations == 0.00)?('-'):(GrandTotal.Evacuations ) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(GrandTotal.Other == 0.00)?('-'):(GrandTotal.Other) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(GrandTotal.RestrictedFunds == 0.00)?('-'):(GrandTotal.RestrictedFunds) |  negativeParenthesisInteger}}</strong></td>
+                        <td><strong>{{(GrandTotal.UnrestrictedFunds  == 0.00)?('-'):(GrandTotal.UnrestrictedFunds ) |  negativeParenthesisInteger}}</strong></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
