@@ -1,0 +1,146 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <a ui-sref="home" id="homeBtn" class="pure-button button-plain">Home</a>
+        </div>
+    </div>
+
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h3>Evacuation</h3>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button button-plain" id="btnEditEvacuationInfo" ng-click="editGeneralInfo()">Edit Evacuation Information</a>
+            <a class="pure-button button-error" ui-sref="Delete({ id: Evacuation.Id })" >Delete Evacuation </a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="selBureau">Bureau</label>
+            <input ng-model="Evacuation.Bureau" id="selBureau" ng-readonly="true" />
+        </div>
+        <div class="pure-u-2-3">
+            <label for="inpStatus">Status</label>
+            <input type="text" ng-readonly="true" ng-model="Evacuation.Status" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="selReason">Evacuation Reason(s)</label>
+            <input id="selReason" ng-model="Evacuation.Reason" ng-readonly="true" />
+        </div>
+        <div class="pure-u-2-3">
+            <label for="Safehaven">Official Safehaven</label>
+            <input type="text" ng-readonly="true" ng-model="Evacuation.Safehaven" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <label for="selPost">Country</label>
+                </div>
+            </div>
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                	 <input type="text" ng-readonly="true" ng-model="Evacuation.Countries" />
+                </div>
+            </div>
+        </div>
+        <div class="pure-u-1-3">
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <label for="selPost">Posts</label>
+                </div>
+            </div>
+            <div class="pure-g">
+                <div class="pure-u-1-3">
+                    <table id="PostTable" class="pure-table pure-table-bordered">
+                        <tbody>
+                            <tr ng-repeat="p in Evacuation.Posts">
+                                <td>{{p}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label>Notes</label>
+            <textarea rows="6" cols="50" ng-model="Evacuation.Notes" ng-readonly="true" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a ng-disabled="Evacuation.Status == 'Ended'" class="pure-button button-plain" ng-click="NewExtension()" id="btnEditExtensions">New Extension</a>&nbsp
+            <a ng-disabled="Evacuation.Extensions < 1 || Evacuation.Status == 'Ended'" class="pure-button button-error" ng-click="End()" id="btnEnd">End Evacuation</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table id="extensionsTable" class="pure-table pure-table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Extension</th>
+                        <th>Type</th>
+                        <th>Evacuees</th>
+                        <th>Start Date</th>
+                        <th>Authorized Until</th>
+                        <th>Cables</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<tr ng-show="Evacuation.Extensions.length == 0">
+						<td colspan="6">No Evacuation Extensions</td>
+					</tr>
+                    <tr ng-repeat="ext in Evacuation.Extensions track by $index">
+                        <td><a class="pure-button pure-button-primary" ng-click="EditExtension($index)">Edit</a></td>
+                        <td>{{ext.ExtensionLabel}}</td>
+                        <td>{{ext.EvacuationType.toString()}}</td>
+                        <td><span ng-repeat="et in ext.Evacuees">{{et.Type}}<span ng-show="et.Type != undefined">:</span> {{et.Personnel}}<br/></span></td>
+                        <td>{{ext.StartDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{ext.EndDate | date: 'MM/dd/yyyy' }}</td>
+                        <td>
+                            <span ng-repeat-start="c in ext.Cables track by $index">
+                                <a ng-show="c.Url != ''" target="_blank" href="{{c.Url}}">{{c.Type}} : {{(!c.Title)?(c.Url):(c.Title)}}</a>
+                                <text ng-show="c.Url == ''">{{c.Type}} : {{(!c.Title)?(c.Url):(c.Title)}}</text>
+                            </span><br ng-repeat-end />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div id="Attachments">
+	<div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h3>Attachments</h3>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+		<div class="pure-u-1" ng-show="Evacuation.Id"> 
+			<input type="file" id="inpFile" file-model="myFile" file-value="fileData" style="cursor:pointer;display:inline-block;" />&nbsp<a class="pure-button button-plain" style="cursor:pointer;display:inline-block;" ng-click="uploadFile()" style="cursor:pointer" ng-disabled="attaching" >Attach File</a><br>
+		</div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-bordered" id="attachmentsTable">
+                <thead><tr><th></th><th>Filename</th></tr></thead>
+                <tbody>
+                    <tr ng-repeat="e in Attachments track by $index">
+						<td><a ng-click="removeAttachment(e.FileName)" style="cursor:pointer">Delete Attachment</a></td>
+						
+						<td><a target="_blank" href="{{e.ServerRelativeUrl}}">{{e.FileName}}</a></td>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

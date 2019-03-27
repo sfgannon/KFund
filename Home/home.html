@@ -1,0 +1,203 @@
+﻿<div class="pure-menu pure-menu-horizontal pure-form" >
+    <ul class="pure-menu-list">
+    
+        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <notification-icon>
+            	<a href="#" id="Transaction" class="pure-menu-link">Transaction</a>
+            </notification-icon>
+            <ul class="pure-menu-children">   
+                <li class="pure-menu-item"><a id="Deposits" ui-sref="ViewAccountAdjustment" class="pure-menu-link">Create Account Adjustment</a></li>         
+                <li class="pure-menu-item"><a id="Adjustment" ui-sref="ViewAdjustment" class="pure-menu-link">Create Adjustment</a></li>  
+                <li class="pure-menu-item"><a id="CreateAllotment" ui-sref="ViewAllotment" class="pure-menu-link">Create Allotment</a></li>               
+                <li class="pure-menu-item"><a id="Deposits" ui-sref="ViewDeposit" class="pure-menu-link">Create Deposit</a></li>   
+                <li class="pure-menu-item"><a id="Evacuation" ui-sref="ViewEvacuation" class="pure-menu-link">Create Evacuation</a></li>
+                <li class="pure-menu-item"><a id="GFMS" ui-sref="ViewGFMS" class="pure-menu-link">Create GFMS Entry</a></li>  
+                <li class="pure-menu-item"><a id="CreateObligation" ui-sref="ViewObligation" class="pure-menu-link">Create Obligation</a></li>
+                <li class="pure-menu-item"><a id="CreatePayment" ui-sref="ViewPayment" class="pure-menu-link">Create Payment</a></li>
+                <li class="pure-menu-item"><a id="PaymentReturn" ui-sref="ViewPaymentReturn" class="pure-menu-link">Create Payment Return</a></li>                  
+                <li class="pure-menu-item"><a id="GenerateFundCite" ui-sref="GenerateFundCite" class="pure-menu-link">Generate Fund Cite</a></li>               
+                <li class="pure-menu-item"><a id="GenerateRPP" ui-sref="GenerateRPP" class="pure-menu-link">Generate RPP</a></li>
+            </ul>
+        </li>
+        
+        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <notification-icon>
+            	<a href="#" id="Reports" class="pure-menu-link">Reports</a>
+            </notification-icon>
+            <ul class="pure-menu-children">
+                <li class="pure-menu-item"><a id="FinPlan" ui-sref="NewFinPlan" class="pure-menu-link">FinPlan</a></li>
+                <li class="pure-menu-item"><a id="SummaryFinPlan" ui-sref="SummaryFinPlan" class="pure-menu-link">Summary Fin Plan</a></li>                
+                <li class="pure-menu-item"><a id="Checkbook" ui-sref="Checkbook" class="pure-menu-link">Generate Checkbook</a></li>                
+                <li class="pure-menu-item"><a id="RepresentationView" ui-sref="RepresentationView" class="pure-menu-link">Generate Representation View</a></li>
+                <li class="pure-menu-item"><a id="YearEndReconciliation" ui-sref="YearEndReconciliation" class="pure-menu-link">Generate Year End Reconciliation</a></li>
+                <li class="pure-menu-item"><a id="EvacReport" class="pure-menu-link" style="cursor:pointer" ng-click="GenerateDocument()">Evacuation Status Report</a></li>
+                 
+            </ul>
+        </li>
+
+		<li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+			<notification-icon>
+				<a ui-sref="Search" class="pure-menu-link">Search</a>
+			</notification-icon>
+		</li>
+
+        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <notification-icon>
+            	<a href="#" id="Admin" class="pure-menu-link">Admin</a>
+            </notification-icon>
+            <ul class="pure-menu-children">
+                <li class="pure-menu-item"><a id="LOV" ui-sref="LOV" class="pure-menu-link">Manage Application Data</a></li>
+                <li class="pure-menu-item"><a id="AccountManagement" ui-sref="AccountManagement" class="pure-menu-link">Manage Accounts</a></li>                
+            </ul>
+        </li>
+        
+        <li id="Notifications"  class="pure-menu-item pure-menu-has-children pure-menu-allow-hover ">
+			<notification-icon count='NotificationCount'>
+				 <a href="#" id="Notifications" class="pure-menu-link">Notifications</a>
+			</notification-icon>
+            <ul class="pure-menu-children">
+                <li class="pure-menu-item pure-menu-link" ng-repeat="a in Alerts track by $index">
+                	<strong> {{a.Purpose}}</strong>
+                	<span class="closebtn"  ng-click="dismissAlert($index)" >&times;</span>
+                	<p dynamic="a.Notes"></p>
+                </li> 
+                
+				<li class="pure-menu-item" style="text-align: center; "><a id="ViewAllNotifications" ui-sref="ViewAllNotifications" class="pure-menu-link">View All Notifications</a></li>            
+            </ul>
+
+		</li>  
+		
+
+      
+    </ul>
+</div>
+
+<div class="pure-g pure-form">
+		
+	<div class="pure-u-3-4">
+		<h4>Active Evacuations <a style="font-size: 70%;" class=" pure-button button-plain" id="btnViewAllEvacs" ui-sref="ViewAllEvacuations">View All</a></h4> 
+	</div>
+	
+	<div class="pure-u-3-4">
+		<table class="pure-table pure-table-bordered" id="tblActiveEvacs">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Posts</th>
+					<th>Start Date</th>
+					<th>Authorized Until</th>
+					<th>Extensions</th>
+					<th>Notes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-show="Evacuations.length == 0">
+					<td colspan="5">No Avaliable Evacuations</td>
+				</tr>
+				<tr ng-repeat="e in Evacuations track by $index">
+					<td><a class="pure-button button-plain" id="btnViewEvac{{$index}}" ui-sref="ViewEvacuation({ id: e.Id })">View</a>
+					</td>
+					<td>{{e.Posts.toString()}}</td>
+					<td>{{e.StartDate | date: 'MM/dd/yyyy' }}</td>
+					<td>{{e.EndDate | date: 'MM/dd/yyyy' }}</td>
+					<!--<td>{{(e.Extensions.length > 1)?(e.Extensions.length - 2):(0)}}</td>-->
+					<td>{{ (e.Status == 'Ended') ? (e.Extensions.length - 2) : 
+						( (e.Extensions.length > 0) ? (e.Extensions.length - 1) : (0) )}}</td>
+						<td>{{e.Notes}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+						
+			
+	<div class="pure-u-3-4">
+		<h4>Recent Transactions</h4>
+	</div>
+	<div class="pure-u-3-4" >
+		<div id="mostRecentTableDiv" style="padding-bottom:10px;">
+		   <table id="mostRecentTable" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">		  
+			  <caption>100 Most Recent Transactions</caption>	
+			  <thead>
+				  <tr>
+				  	<th>Created Date</th>
+				    <th colspan="8"> </th>			    
+				  </tr>
+			  </thead>
+			  <tbody >
+			  	<tr ng-show="Transactions.length == 0">
+			  		<td colspan="7">No Transactions</td>
+			  	</tr>
+				<tr ng-repeat="object in Transactions | limitTo: 100 ">
+					<td ng-if="object.SortDate <= LegacyDataSortDate">{{object.Date}}</td>
+					<td ng-if="object.SortDate > LegacyDataSortDate">{{object.Created}}</td>
+					<td ng-if="object.ItemType == 'Payment'"><a ng-click="GoToPayment(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'Obligation'"><a ng-click="GoToObligation(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'Allotment'"><a ng-click="GoToAllotment(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'Reimbursement'"><a ng-click="GoToAllotment(object.AllotmentId)">Edit</a></td>
+					<td ng-if="object.ItemType == 'SOF'"><a ng-click="GoToAllotment(object.AllotmentId)">Edit</a></td>
+					<td ng-if="object.ItemType == 'Deposit'"><a ng-click="GoToDeposit(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'ReimbursementAgreement'"><a ng-click="GoToReimbursementAgreement(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'Evacuation'"><a ng-click="GoToEvacuation(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'Adjustment'"><a ng-click="GoToAdjustment(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'PaymentReturn'"><a ng-click="GoToPaymentReturn(object.ID)">Edit</a></td>
+					<td ng-if="object.ItemType == 'GFMS'"><a ng-click="GoToGFMS(object.ID)">Edit</a></td>
+
+
+					<td>{{object.ItemType}}</td>
+					
+					<td ng-if="object.ItemType == 'SOF'">{{object.SOFType}}</td>
+					<td ng-if="object.ItemType == 'Payment'">{{object.PaymentType}}</td>
+					<td ng-if="object.ItemType == 'Obligation'">{{object.ObligationNumber}}</td>
+					<td ng-if="object.ItemType == 'Allotment'">{{object.AllotmentAuthority}}</td>
+					<td ng-if="object.ItemType == 'Reimbursement'">{{object.Agency}}</td>
+					<td ng-if="object.ItemType == 'Deposit'">{{object.PaymentType}}</td>
+					<td ng-if="object.ItemType == 'ReimbursementAgreement'">{{object.Agency}}</td>
+					<td ng-if="object.ItemType == 'Adjustment'">{{object.Purpose}}</td>
+					<td ng-if="object.ItemType == 'PaymentReturn'">{{object.PaymentReturnType}}</td>
+					<td ng-if="object.ItemType == 'GFMS'">{{object.AdjustmentType}}</td>
+					
+					
+					<td ng-if="object.ItemType == 'Allotment'">{{object.Appropriation}}</td>
+					<td ng-if="object.ItemType != 'Allotment'"></td>
+
+					
+
+					<td ng-if="object.ItemType == 'Allotment'"></td>
+					<td ng-if="object.ItemType != 'Allotment'" align="right">{{object.Amount | currency | negativeParenthesis }}</td>
+					
+					<td ng-if="object.ItemType == 'Payment'">{{object.Purpose}}</td>
+					<td ng-if="object.ItemType == 'Obligation'">{{object.ObligationDescription}}</td>
+					<td ng-if="object.ItemType == 'Allotment'">{{object.ChangeNUmber}}</td>
+					<td ng-if="object.ItemType == 'Reimbursement'">{{object.Program}}</td>
+					<td ng-if="object.ItemType == 'Deposit' && object.PaymentType != 'Gift Fund Deposit'">{{object.CheckNumber}}</td>
+					<td ng-if="object.ItemType == 'Deposit' && object.PaymentType == 'Gift Fund Deposit'">{{object.Payee}}</td>
+					<td ng-if="object.ItemType == 'ReimbursementAgreement'">{{object.Purpose}}</td>
+					<td ng-if="object.ItemType == 'SOF'">{{object.Desc}}</td>
+					<td ng-if="object.ItemType == 'Adjustment'">{{object.Desc}}</td>
+					<td ng-if="object.ItemType == 'PaymentReturn'">{{object.PaymentReturnReason}}</td>
+					<td ng-if="object.ItemType == 'GFMS'"></td>					
+					
+
+
+					<td ng-if="object.ItemType == 'Payment'">{{object.OperatingAllowance}}</td>
+					<td ng-if="object.ItemType == 'Obligation'"></td>
+					<td ng-if="object.ItemType == 'Allotment'">{{object.NY}}</td>
+					<td ng-if="object.ItemType == 'Reimbursement'">{{object.Purpose}}</td>
+					<td ng-if="object.ItemType == 'Deposit'">{{object.ItemDescription}}</td>
+					<td ng-if="object.ItemType == 'ReimbursementAgreement'"></td>
+					<td ng-if="object.ItemType == 'SOF'"></td>
+					<td ng-if="object.ItemType == 'Adjustment'">{{object.OperatingAllowance}}</td>
+					<td ng-if="object.ItemType == 'PaymentReturn'">{{object.OperatingAllowance}}</td>	
+					<td ng-if="object.ItemType == 'GFMS'"></td>				
+
+					
+
+				</tr>	
+			  </tbody>
+		  </table>
+		</div>	
+	
+	</div>
+
+
+</div>

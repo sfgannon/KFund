@@ -1,0 +1,51 @@
+<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button button-plain" ui-sref="home" id="btnHome">Home</a>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Checking Account Adjustment</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpDate">Effective Date</label>
+            <input ng-readonly="true" type="date" id="inpDate" ng-model="Adjustment.Date" data-format="MM/dd/yyyy" />
+        </div>
+        <div class="pure-u-2-3"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <input ng-readonly="true" type="text" id="inpDate" ng-model="Adjustment.AdjustmentType" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpAmount">Amount</label>
+            <input type="text" ng-readonly="true" ng-input-currency  id="inpAmount" ng-model="Adjustment.Amount" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpOperatingAllowance">Operating Allowance</label>
+            <input ng-readonly="true" type="text" id="inpDate" ng-model="Adjustment.OperatingAllowance" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpGiftFundsUsed">Gift Funds Used</label>
+            <input type="checkbox" id="inpGiftFundsUsed" ng-model="Adjustment.GiftFundsUsed" ng-readonly="true" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpGiftFundsAmount">Gift Funds Amount</label>
+            <input type="text"  ng-input-currency ng-readonly="true" id="inpGiftFundsAmount" ng-model="Adjustment.GiftFundsAmount" />
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="taNotes">Notes</label>
+            <textarea id="taNotes" rows="6" cols="60" ng-model="Adjustment.Notes" ng-readonly="true"></textarea>
+        </div>
+    </div>
+</div>

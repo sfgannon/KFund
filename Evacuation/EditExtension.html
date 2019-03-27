@@ -1,0 +1,134 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <h4>{{Extension.ExtensionLabel}}</h4>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-5">
+            <label>Start Date</label>
+            <input type="date" ng-readonly="Evacuation.Extensions.length > 0" ng-model="Extension.StartDate" data-format="MM/dd/yyyy" ng-blur="setEndDate()" />
+        </div>
+        <div class="pure-u-1-5">
+            <label for="inpEnd">End Date</label>
+            <input type="date" id="inpEnd" ng-model="Extension.EndDate" data-format="MM/dd/yyyy" ng-readonly="Extension.ExtensionLabel != 'Ended'" />
+        </div>
+        <div class="pure-u-1-5">
+            <label>Evacuation Type</label>
+            <select multiple ng-model="Extension.EvacuationType">
+                <option ng-repeat="et in EvacuationTypes track by $index">{{et.ValueOfItem}}</option>
+            </select>
+        </div>
+        <div class="pure-u-2-5"></div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1"><h4>Evacuee Types</h4></div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1-5">
+            <label>Evacuee Type</label>
+            <select ng-model="EvacueeType">
+                <option ng-repeat="et in EvacuationTypes track by $index">{{et.ValueOfItem}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-5">
+            <label>Personnel Type</label>
+            <select ng-model="PersonnelType">
+                <option ng-repeat="p in PersonnelTypes track by $index">{{p.ValueOfItem}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-5" ng-if="PersonnelType == 'Other'">
+            <input type="text" ng-model="PersonnelTypeOther" id="inpOther" ng-if="PersonnelType == 'Other'" />
+        </div>
+        <div class="pure-u-2-5"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-4">
+            <a class="pure-button button-plain" ng-click="AddEvacuees()" ng-disabled="Extension.ExtensionLabel == 'Ended'">Add Evacuees</a>
+        </div>
+        <div class="pure-u-3-4"></div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Evacuee Type</th>
+                        <th>Personnel Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="evacuee in Extension.Evacuees track by $index">
+                        <td><a class="pure-button button-error" id="removeEvacuee" ng-click="removeEvacuee($index)" style="cursor:pointer">Remove</a></td>
+                        <td>{{evacuee.Type}}</td>
+                        <td>{{evacuee.Personnel}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <h4> Reference Cables</h4>
+        </div>
+    </div>
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <label for="selCableTypes">Cable Types</label>
+            <select  id="selCableTypes" ng-model="Cable.CableType">
+                <option ng-repeat="ct in CableTypes">{{ct}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1">
+            <label for="selAttachTypes">Attach</label>
+            <select id="selAttachTypes" ng-model="Cable.Attach">
+                <option ng-repeat="at in AttachTypes">{{at}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3"  ng-show="Cable.Attach == 'File'"><!-- -->
+            <label for="inpCable">File</label>
+            <input type="file" id="inpCableFile" file-model="cableFile" file-value="fileData" style="cursor:pointer;" />
+            <a id="uploadCable" class="pure-button button-plain" style="cursor:pointer;display:inline-block;" ng-click="uploadCable()" style="cursor:pointer" ng-disabled="attachingCable" >Add Cable</a><br>
+        </div>           
+        <div class="pure-u-2-3"  ng-show="Cable.Attach == 'File'">
+            <label for="inpTitle">Description</label>
+            <input type="text" id="inpTitle" ng-model="cableFile.Title" />&nbsp
+        </div>        	
+        <div class="pure-u-1-3" ng-show="Cable.Attach == 'Url'">
+            <label for="inpCable">Url</label>
+            <input type="text" id="inpCableUrl" ng-model="cableUrl.Url" />
+            <a id="uploadCable" class="pure-button button-plain" style="cursor:pointer;display:inline-block;" ng-click="uploadCable()" style="cursor:pointer" ng-disabled="attachingCable" >Add Cable</a><br>
+        </div>           
+        <div class="pure-u-2-3" ng-show="Cable.Attach == 'Url'">
+            <label for="inpTitle">Description</label>
+            <input type="text" id="inpUrlTitle" ng-model="cableUrl.Title" />&nbsp
+        </div>
+    </div>
+    <div class="pure-g" style="padding-top:5px;">
+        <div class="pure-u-1">
+            <table class="pure-table pure-table-bordered" id="cablesTable">
+                <thead><tr><th></th><th>Type</th><th>Cable</th></tr></thead>
+                <tbody>
+                    <tr ng-show="Extension.Cables.length == 0">
+                        <td colspan="3">
+                            No Cables Uploaded
+                        </td>
+                    </tr>
+                    <tr ng-repeat="e in Extension.Cables track by $index">
+                        <td><a id="removeCable" ng-click="removeCable(e)" style="cursor:pointer">Delete Cable</a></td>
+                        <td> {{e.Type}}</td>
+                        <td><a target="_blank" href="{{e.Url}}">{{(!e.Title)?(e.Url):(e.Title)}}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="pure-g padding-row pure-form pure-form-stacked">
+    <div class="pure-u">
+        <a class="pure-button pure-button-primary" ng-click="SaveEvacuation()">Save</a>&nbsp
+        <a class="pure-button button-plain" ng-click="Cancel()">Cancel</a>&nbsp
+        <a class="pure-button button-error" ng-click="Delete()" ng-if="Ext != ''">Delete</a>
+    </div>
+</div>

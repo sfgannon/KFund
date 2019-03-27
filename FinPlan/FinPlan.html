@@ -1,0 +1,213 @@
+<div class="pure-g pure-form pure-form-stacked padding-row">
+    <div class="pure-u-1">
+        <a class="pure-button button-plain" id="HomeBtn" ui-sref="home">Home</a>
+    </div>
+</div>
+<div class="pure-g padding-row">
+    <div class="pure-u-1">
+        <h3>FinPlan</h3>
+    </div>
+</div>
+<div class="pure-g pure-form">
+	<div class="pure-u-1-8" style="padding-bottom:10px">		
+		<label>Fiscal Year</label>
+    </div>
+    <div class="pure-u-7-8">
+        <select ng-model="FiscalYear">
+            <option ng-repeat="fy in FiscalYears track by $index" ng-selected="FiscalYear == fy" >{{fy}}</option>
+        </select>
+	</div>
+</div>
+<div class="pure-g padding-row pure-form">
+    <div class="pure-u-1">
+        <a class="pure-button button-secondary" ng-click="Go()">View</a>
+    </div>
+</div>
+<div class="pure-g padding-row pure-form pure-form-stacked">
+    <div class="pure-u-1">
+        <ul class="tab">
+            <li ng-repeat="OA in Report.Tabs track by $index"><a href="javascript:void(0)"  class="tablinks" ng-click="openTab(event , OA.Title)" >{{OA.Title}}</a></li>
+            <li><a href="javascript:void(0)" class="tablinks" ng-click="openTab(event, 'Totals')" >Totals</a></li>
+        </ul>
+        <div ng-repeat="OA in Report.Tabs track by $index" id="{{OA.Title}}" class="tabcontent padding-row">	
+            <div id="{{OA.Title}}TableDiv">
+                <h4>{{OA.Title}} - {{OA.Subtitle}}</h4>
+                <table id="{{OA.Title}}Table" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+                    <tr>
+                        <th>Date</th>
+                        <th>Oblig #</th>
+                        <th>Check #</th>
+                        <th>Check Amount</th>
+                        <th>Obligation Amount</th>
+                        <th>Liquidated</th>
+                        <th>Unliquidated</th>
+                        <th>Total Obligation</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr ng-repeat="obj in OA.Rows track by $index">
+                        <td>{{obj.Date}}</td>
+                        <td><a ng-if="obj.ObligationNumber != ''" ng-click="GoToItem(obj.Id, obj.ItemType)">{{obj.ObligationNumber}}</a></td>
+                        <td><a ng-if="obj.Purpose != ''" ng-click="GoToItem(obj.Id, obj.ItemType)">{{obj.Purpose}}</a></td>
+                        <td>{{obj.CheckAmount | currency | negativeParenthesis }}</td>
+                        <td>{{obj.Obligations | currency | negativeParenthesis }}</td>
+                        <td>{{obj.Liquidated | currency | negativeParenthesis }}</td>
+                        <td>{{obj.Unliquidated | currency | negativeParenthesis }}</td>
+                        <td>{{obj.TotalObligations | currency | negativeParenthesis }}</td>
+                        <td>{{obj.Description}}</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Total:</th>
+                        <th>{{OA.TotalRow.CheckAmount | currency | negativeParenthesis }}</th>
+                        <th>{{OA.TotalRow.Obligations | currency | negativeParenthesis }}</th>
+                        <th>{{OA.TotalRow.Liquidated | currency | negativeParenthesis }}</th>
+                        <th>{{OA.TotalRow.Unliquidated | currency | negativeParenthesis }}</th>
+                        <th>{{OA.TotalRow.TotalObligations | currency | negativeParenthesis }}</th>
+                        <th>{{OA.TotalRow.Description}}</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div  id="Totals" class="tabcontent">	
+            <div id="TotalsTableDiv">
+                <table id="TotalsTable" style="width:100%" class="pure-table pure-table-horizontal pure-table-striped mabel">
+                <tr>		    
+                    <th>Check Amounts</th>
+                    <th>Operating Allowance</th>
+                    <th>Obligations</th>
+                    <th>Liquidated Amounts</th>
+                    <th>Unliquidated Amounts</th>
+                    <th>Total Obligation</th>
+                    <th>Purpose</th>
+                </tr>
+                <tr ng-repeat="row in Report.TotalTab.OperatingAllowances track by $index">
+                    <td>{{row.CheckAmount | currency | negativeParenthesis}}</td>
+                    <td>{{row.OperatingAllowance}}</td>
+                    <td>{{row.Obligations | currency | negativeParenthesis}}</td>
+                    <td>{{row.LiquidatedBalance | currency | negativeParenthesis}}</td>
+                    <td>{{row.UnliquidatedBalance | currency | negativeParenthesis}}</td>
+                    <td>{{row.Obligation | currency | negativeParenthesis}}</td>
+                    <td>{{row.Purpose}}</td>
+                </tr>
+                <tr>		    
+                    <th>{{Report.TotalTab.TotalRow.CheckAmountsTotal | currency | negativeParenthesis}}</th>
+                    <th>TOTAL</th>
+                    <th>{{Report.TotalTab.TotalRow.ObligationsTotal | currency | negativeParenthesis}}</th>
+                    <th>{{Report.TotalTab.TotalRow.LiquidatedBalanceTotal | currency | negativeParenthesis}}</th>
+                    <th>{{Report.TotalTab.TotalRow.UnliquidatedBalanceTotal | currency | negativeParenthesis}}</th>
+                    <th>{{Report.TotalTab.TotalRow.ObligationsTotal | currency | negativeParenthesis}}</th>
+                    <th></th>
+                </tr>
+
+
+                </table>
+                <br>
+                <table class="pure-table pure-table-striped pure-table-horizontal">
+                    <tbody>
+                        <tr>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[0]["Amount"] | currency | negativeParenthesis}}</td>
+                            <td>Allot 1007 - Regular</td>
+                        </tr>
+                        <tr>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[1]["Amount"] | currency | negativeParenthesis}}</td>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[1]["Allotment"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[2]["Amount"] | currency | negativeParenthesis}}</td>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[2]["Allotment"]}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[3]["Amount"] | currency | negativeParenthesis}}</td>
+                            <td>{{Report.TotalTab.ObligationAllotmentRows[3]["Allotment"]}}</td>
+                        </tr>
+                        <tr>
+                            <th>{{Report.TotalTab.ObligationAllotmentTotal["Amount"] | currency | negativeParenthesis}}</th>
+                            <th>{{Report.TotalTab.ObligationAllotmentTotal["Allotment"]}}</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <table class="pure-table pure-table-striped pure-table-horizontal">
+                    <tbody>
+                        <tr>
+                            <th>1007</th>
+                            <th>2003</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>{{Report.TotalTab.AllotmentRows[0]['1007'] | currency | negativeParenthesis }}</td>
+                            <td>{{Report.TotalTab.AllotmentRows[0]['2003'] | currency | negativeParenthesis}}</td>
+                            <td>{{Report.TotalTab.AllotmentRows[0]['Total'] | currency | negativeParenthesis}}</td>
+                            <td>Regular</td>
+                        </tr>
+                        <tr>
+                            <td>{{Report.TotalTab.AllotmentRows[1]['1007'] | currency | negativeParenthesis }}</td>
+                            <td>{{Report.TotalTab.AllotmentRows[1]['2003'] | currency | negativeParenthesis}}</td>
+                            <td>{{Report.TotalTab.AllotmentRows[1]['Total'] | currency | negativeParenthesis}}</td>
+                            <td>Funding W/D for Prior Years</td>
+                        </tr>
+                        <tr>
+                            <td>{{Report.TotalTab.AllotmentRows[2]['1007'] | currency | negativeParenthesis }}</td>
+                            <td>{{Report.TotalTab.AllotmentRows[2]['2003'] | currency | negativeParenthesis}}</td>
+                            <td>{{Report.TotalTab.AllotmentRows[2]['Total'] | currency | negativeParenthesis}}</td>
+                            <td>Upward Spending Adj-Out</td>
+                        </tr>
+                        <tr>
+                            <th>{{Report.TotalTab.AllotmentTotalRow['1007'] | currency | negativeParenthesis }}</th>
+                            <th>{{Report.TotalTab.AllotmentTotalRow['2003'] | currency | negativeParenthesis}}</th>
+                            <th>{{Report.TotalTab.AllotmentTotalRow['Total'] | currency | negativeParenthesis}}</th>
+                            <th>Total K Fund</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+	/* Style the list */
+	ul.tab {
+	    list-style-type: none;
+	    margin: 0;
+	    padding: 0;
+	    overflow: hidden;
+	    border: 1px solid #ccc;
+	    background-color: #f1f1f1;
+	}
+	
+	/* Float the list items side by side */
+	ul.tab li {float: left;}
+	
+	/* Style the links inside the list items */
+	ul.tab li a {
+	    display: inline-block;
+	    color: black;
+	    text-align: center;
+	    padding: 14px 16px;
+	    text-decoration: none;
+	    transition: 0.3s;
+	    font-size: 17px;
+	}
+	
+	/* Change background color of links on hover */
+	ul.tab li a:hover {background-color: #ddd;}
+	
+	/* Create an active/current tablink class */
+	ul.tab li a:focus, .active {background-color: #ccc;}
+	
+	/* Style the tab content */
+	.tabcontent {
+	    display: none;
+	    padding: 6px 12px;
+	    border: 1px solid #ccc;
+	    border-top: none;
+	}
+	
+}
+
+</style>

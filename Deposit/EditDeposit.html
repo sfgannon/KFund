@@ -1,0 +1,74 @@
+﻿<div class="pure-form pure-form-stacked">
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <h4>Edit Deposit</h4>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpDate">Date</label>
+            <input type="date" id="inpDate" ng-model="Deposit.Date" data-format="MM/dd/yyyy"  />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpAmount">Amount</label>
+            <input type="text"  ng-input-currency  id="inpAmount" ng-model="Deposit.Amount" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpCheckNumber">Check Number</label>
+            <input type="text" id="inpCheckNumber" ng-model="Deposit.CheckNumber" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="selAppropriation">Appropriation</label>
+            <select id="selAppropriation" ng-model="Deposit.Appropriation" >
+                <option ng-repeat="a in Appropriations">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3">
+            <label for="selAllotment">Allotment</label>
+            <select id="selAllotment" ng-model="Deposit.Allotment" ng-change="changeAppropriation()" >
+                <option ng-repeat="a in Allotments">{{a}}</option>
+            </select>
+        </div>
+        <div class="pure-u-1-3" ng-hide="Deposit.Allotment == '2003' || Deposit.Allotment == ''">
+            <label for="selOperatingAllowance">Operating Allowance</label>
+            <select ng-model="Deposit.OperatingAllowance" id="selOperatingAllowance"  ng-change="changeOperatingAllowance()" >
+                <option ng-if="o != '2003'" ng-repeat="o in OperatingAllowances">{{o}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <label for="inpPurpose">Purpose</label>
+            <input type="text" id="inpPurpose" ng-model="Deposit.Purpose" style="width:60%;" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpCleared">Deposit Cleared</label>
+            <input type="checkbox" id="inpCleared" ng-model="Deposit.ClearedStatus" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpMemo">Memo</label>
+            <input id="inpMemo" ng-model="Deposit.Memo" />
+        </div>
+        <div class="pure-u-1-3"></div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1-3">
+            <label for="inpGiftFundsUsed">Gift Funds Used</label>
+            <input type="checkbox" inp="inpGiftFundsUsed" ng-model="Deposit.GiftFundsUsed" />
+        </div>
+        <div class="pure-u-1-3">
+            <label for="inpGiftFundsAmount">Gift Funds Amount</label>
+            <input type="text"  ng-input-currency  id="inpGiftFundsAmount" ng-model="Deposit.GiftFundsAmount" />
+        </div>
+    </div>
+    <div class="pure-g padding-row">
+        <div class="pure-u-1">
+            <a class="pure-button pure-button-primary" ng-click="SaveDeposit()" id="btnSave" ng-disabled="isDisabled">Save Deposit</a>&nbsp
+            <a class="pure-button button-plain" ng-click="cancel()" id="btnCancel" ng-disabled="isDisabled">Cancel</a>
+        </div>
+    </div>
+</div>
